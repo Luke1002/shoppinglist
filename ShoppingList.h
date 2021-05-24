@@ -18,6 +18,14 @@ public:
 
     virtual ~ShoppingList();
 
+    const std::string &getListName() const;
+
+    void setListName(const std::string &name);
+
+    void addObject();
+
+    void printList();
+
 protected:
 
 private:
