@@ -14,6 +14,22 @@ public:
 
     virtual ~ShoppingObject();
 
+    const std::string &getObjectName() const;
+
+    void setObjectName(std::string name);
+
+    int getObjectNumber() const;
+
+    void setObjectNumber(int number);
+
+    void printObjectInfo();
+
+    void checkTrue();
+
+    void checkFalse();
+
+    bool isBought() const;
+
 protected:
 
 private:
