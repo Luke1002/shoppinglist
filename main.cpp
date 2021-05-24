@@ -144,6 +144,9 @@ int main() {
         else if (cmd == "checkobject") {
             //TODO ADD "checkobject" COMMAND
         }
+        else if (cmd == "uncheckobject") {
+            //TODO ADD "uncheckobject" COMMAND
+        }
         else if (cmd == "shoppingprogress") {
             //TODO ADD "shoppingprogress" COMMAND
         }
