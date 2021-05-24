@@ -8,8 +8,8 @@
 
 int main() {
     std::string cmd;
-    std::string name;
-    bool isNameUsed = false;
+    std::string* name;
+    bool nameFound;
     int quantity;
     ShoppingList* currentShoppingList;
     ShoppingObject* currentShoppingObject;
@@ -20,7 +20,7 @@ int main() {
               << "Type \"help\" to view the list of commands available" << std::endl;
     do
     {
-        isNameUsed = false;
+        nameFound = false;
         std::cout << ">> ";
         std::getline(std::cin, cmd);
         if(cmd == "help")
@@ -40,49 +40,51 @@ int main() {
         }
         else if(cmd == "newshoppinglist")
         {
+            name = new std::string;
             do
             {
-                isNameUsed = false;
+                nameFound = false;
                 std::cout << "Insert list name" << std::endl
                           << "Name: ";
-                std::getline(std::cin, name);
+                std::getline(std::cin, *name);
                 std::cout << name << std::endl;
 
                 for(auto& element : savedlists)
                 {
-                    if (element.getListName() == name)
+                    if (element.getListName() == *name)
                     {
-                        isNameUsed = true;
+                        nameFound = true;
                         std::cout << "Name already used for another list." << std::endl << "Please choose a different name" << std::endl;
                     }
                 }
-                if(!isNameUsed)
+                if(!nameFound)
                 {
-                    savedlists.emplace_back(name);
+                    savedlists.emplace_back(*name);
                     currentShoppingList = &(savedlists.back());
                 }
 
-            }while(isNameUsed);
+            }while(nameFound);
+            delete[] name;
         }
         else if(cmd == "addobject")
         {
-
+            name = new std::string;
             if(currentShoppingList != nullptr)
             {
                 std::cout << "Please enter object name" << std::endl;
                 do
                 {
                     std::cout << "Name: ";
-                    std::getline(std::cin, name);
+                    std::getline(std::cin, *name);
                     for(const auto& element : currentShoppingList->getShoppingList())
                     {
-                        if(name == element.getObjectName())
+                        if(*name == element.getObjectName())
                         {
-                            isNameUsed = true;
+                            nameFound = true;
                             std::cout << "Name already used for another object in the same list." << std::endl << "Please choose a different name" << std::endl;
                         }
                     }
-                }while(isNameUsed);
+                }while(nameFound);
                 std::cout << "Please enter quantity" << std::endl;
                 do
                 {
@@ -95,7 +97,7 @@ int main() {
                     }
                 }while(!std::cin);
                 std::cin.clear();
-                currentShoppingList->addObject(name, quantity);
+                currentShoppingList->addObject(*name, quantity);
                 currentShoppingObject = &(currentShoppingList->getShoppingList().back());
             }
             else
@@ -103,31 +105,50 @@ int main() {
                 std::cout << "No list has been selected." << std::endl
                           << "Please select a list before trying to add an object" << std::endl;
             }
+            delete[] name;
         }
         else if(cmd == "selectshoppinglist")
         {
-            std::cout << "Development in progress..." << std::endl;
+            name = new std::string;
+            std::cout << "insert name of list to change to" << std::endl;
+            std::getline(std::cin, *name);
+            for(auto element : savedlists)
+            {
+                if(*name == element.getListName())
+                {
+                    nameFound = true;
+                    currentShoppingList = &element;
+                }
+            }
+            if(nameFound)
+            {
+                std::cout << "Selected list successfully changed" << std::endl;
+            }
+            else
+            {
+                std::cout << "Shopping list not found. Please check the list name spelling" << std::endl;
+            }
+            delete[] name;
         }
         else if(cmd == "selectobject")
         {
-            std::cout << "Development in progress..." << std::endl;
+            //TODO ADD "selectobject" COMMAND
         }
         else if(cmd == "printshoppinglist")
         {
-            std::cout << currentShoppingList->getListName() << std::endl;
-            std::cout << "Development in progress..." << std::endl;
+            //TODO ADD "printshoppinglist" COMMAND
         }
         else if(cmd == "printobject")
         {
-            std::cout << "Development in progress..." << std::endl;
+            //TODO ADD "printobject" COMMAND
         }
         else if(cmd == "checkobject")
         {
-            std::cout << "Development in progress..." << std::endl;
+            //TODO ADD "checkobject" COMMAND
         }
         else if(cmd == "shoppingprogress")
         {
-            std::cout << "Development in progress..." << std::endl;
+            //TODO ADD "shoppingprogress" COMMAND
         }
     }while(cmd != "exit" || cmd != "Exit");
 
