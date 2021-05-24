@@ -22,9 +22,11 @@ public:
 
     void setListName(const std::string &name);
 
-    void addObject();
+    void addObject(std::string name, int number);
 
     void printList();
+
+    std::list<ShoppingObject>& getShoppingList();
 
 protected:
 

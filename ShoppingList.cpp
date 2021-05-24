@@ -24,29 +24,30 @@ void ShoppingList::setListName(const std::string &name) {
     ShoppingList::listName = name;
 }
 
-void ShoppingList::addObject()
+void ShoppingList::addObject(std::string name, int number)
 {
-    int number;
-    std::string name;
-    std::cin >> name;
-    std::cin >> number;
     shoppingList.emplace_back(name, number);
 }
 
 void ShoppingList::printList()
 {
-    for(auto itr = shoppingList.begin(); itr != shoppingList.end(); ++itr)
+    std::cout << listName << std::endl << std::endl;
+    for(auto element : shoppingList)
     {
-        std::cout << "Oggetto: " << (*itr).getObjectName() << std::endl
-                  << "Quantità: " << (*itr).getObjectNumber() << std::endl
-                  << "Acquistato: ";
-        if((*itr).isBought())
+        std::cout << "Object: " << element.getObjectName() << std::endl
+                  << "Quantity: " << element.getObjectNumber() << std::endl
+                  << "Bought: ";
+        if(element.isBought())
         {
-            std::cout << "Sì" << std::endl;
+            std::cout << "Yes" << std::endl;
         }else
         {
             std::cout << "No" << std::endl;
         }
         std::cout << std::endl;
     }
+}
+
+std::list<ShoppingObject> &ShoppingList::getShoppingList() {
+    return shoppingList;
 }

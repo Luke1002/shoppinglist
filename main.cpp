@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <limits>
 
 
 #include "ShoppingList.h"
@@ -7,6 +8,9 @@
 
 int main() {
     std::string cmd;
+    std::string name;
+    bool isNameUsed = false;
+    int quantity;
     ShoppingList* currentShoppingList;
     ShoppingObject* currentShoppingObject;
     std::list<ShoppingList> savedlists;
@@ -16,6 +20,7 @@ int main() {
               << "Type \"help\" to view the list of commands available" << std::endl;
     do
     {
+        isNameUsed = false;
         std::cout << ">> ";
         std::getline(std::cin, cmd);
         if(cmd == "help")
@@ -35,8 +40,6 @@ int main() {
         }
         else if(cmd == "newshoppinglist")
         {
-            std::string name;
-            bool isNameUsed = false;
             do
             {
                 isNameUsed = false;
@@ -50,13 +53,10 @@ int main() {
                     if (element.getListName() == name)
                     {
                         isNameUsed = true;
+                        std::cout << "Name already used for another list." << std::endl << "Please choose a different name" << std::endl;
                     }
                 }
-                if(isNameUsed)
-                {
-                    std::cout << "Name already used for another list." << std::endl << "Please choose a different name" << std::endl;
-                }
-                else
+                if(!isNameUsed)
                 {
                     savedlists.emplace_back(name);
                     currentShoppingList = &(savedlists.back());
@@ -66,7 +66,43 @@ int main() {
         }
         else if(cmd == "addobject")
         {
-            std::cout << "Development in progress..." << std::endl;
+
+            if(currentShoppingList != nullptr)
+            {
+                std::cout << "Please enter object name" << std::endl;
+                do
+                {
+                    std::cout << "Name: ";
+                    std::getline(std::cin, name);
+                    for(const auto& element : currentShoppingList->getShoppingList())
+                    {
+                        if(name == element.getObjectName())
+                        {
+                            isNameUsed = true;
+                            std::cout << "Name already used for another object in the same list." << std::endl << "Please choose a different name" << std::endl;
+                        }
+                    }
+                }while(isNameUsed);
+                std::cout << "Please enter quantity" << std::endl;
+                do
+                {
+                    std::cout << "Quantity: ";
+                    std::cin >> quantity;
+                    if (!std::cin)
+                    {
+                        std::cout << "Invalid input. Please enter an integer" << std::endl;
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    }
+                }while(!std::cin);
+                std::cin.clear();
+                currentShoppingList->addObject(name, quantity);
+                currentShoppingObject = &(currentShoppingList->getShoppingList().back());
+            }
+            else
+            {
+                std::cout << "No list has been selected." << std::endl
+                          << "Please select a list before trying to add an object" << std::endl;
+            }
         }
         else if(cmd == "selectshoppinglist")
         {
