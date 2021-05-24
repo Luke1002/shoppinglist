@@ -24,24 +24,19 @@ void ShoppingList::setListName(const std::string &name) {
     ShoppingList::listName = name;
 }
 
-void ShoppingList::addObject(std::string name, int number)
-{
+void ShoppingList::addObject(std::string name, int number) {
     shoppingList.emplace_back(name, number);
 }
 
-void ShoppingList::printList()
-{
+void ShoppingList::printList() {
     std::cout << listName << std::endl << std::endl;
-    for(auto element : shoppingList)
-    {
+    for (auto element : shoppingList) {
         std::cout << "Object: " << element.getObjectName() << std::endl
                   << "Quantity: " << element.getObjectNumber() << std::endl
                   << "Bought: ";
-        if(element.isBought())
-        {
+        if (element.isBought()) {
             std::cout << "Yes" << std::endl;
-        }else
-        {
+        } else {
             std::cout << "No" << std::endl;
         }
         std::cout << std::endl;

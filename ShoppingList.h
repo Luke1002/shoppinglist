@@ -26,7 +26,7 @@ public:
 
     void printList();
 
-    std::list<ShoppingObject>& getShoppingList();
+    std::list<ShoppingObject> &getShoppingList();
 
 protected:
 
