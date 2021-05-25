@@ -3,4 +3,4 @@ project(shoppinglistmanager)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(shoppinglistmanager main.cpp ShoppingObject.cpp ShoppingObject.h ShoppingList.cpp ShoppingList.h)
+add_executable(shoppinglistmanager main.cpp ShoppingObject.cpp ShoppingObject.h ShoppingList.cpp ShoppingList.h commands.cpp commands.h)
