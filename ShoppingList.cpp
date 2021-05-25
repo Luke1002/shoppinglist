@@ -5,11 +5,12 @@
 #include <iostream>
 #include <string>
 #include <list>
+#include <utility>
 
 #include "ShoppingList.h"
 
 
-ShoppingList::ShoppingList(std::string name) : listName(name) {
+ShoppingList::ShoppingList(std::string name) : listName(std::move(name)) {
 }
 
 ShoppingList::~ShoppingList() {
@@ -24,22 +25,14 @@ void ShoppingList::setListName(const std::string &name) {
     ShoppingList::listName = name;
 }
 
-void ShoppingList::addObject(std::string name, int number) {
+void ShoppingList::addObject(const std::string& name, unsigned int number) {
     shoppingList.emplace_back(name, number);
 }
 
 void ShoppingList::printList() {
     std::cout << listName << std::endl << std::endl;
-    for (auto element : shoppingList) {
-        std::cout << "Object: " << element.getObjectName() << std::endl
-                  << "Quantity: " << element.getObjectNumber() << std::endl
-                  << "Bought: ";
-        if (element.isBought()) {
-            std::cout << "Yes" << std::endl;
-        } else {
-            std::cout << "No" << std::endl;
-        }
-        std::cout << std::endl;
+    for (const auto& element : shoppingList) {
+        element.printObjectInfo();
     }
 }
 

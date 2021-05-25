@@ -14,7 +14,7 @@
 class ShoppingList {
 public:
 
-    ShoppingList(std::string name);
+    explicit ShoppingList(std::string name);
 
     virtual ~ShoppingList();
 
@@ -22,7 +22,7 @@ public:
 
     void setListName(const std::string &name);
 
-    void addObject(std::string name, int number);
+    void addObject(const std::string& name, unsigned int number);
 
     void printList();
 

@@ -4,37 +4,42 @@
 
 #include <iostream>
 #include <string>
+#include <utility>
 
 #include "ShoppingObject.h"
 
-ShoppingObject::ShoppingObject(const std::string name, int number) : objectName(name), objectNumber(number) {
+ShoppingObject::ShoppingObject(std::string  name, int number) : objectName(std::move(name)), objectQuantity(number), inCart(false) {
 
 }
 
-ShoppingObject::~ShoppingObject() {
-
-}
+ShoppingObject::~ShoppingObject() = default;
 
 const std::string &ShoppingObject::getObjectName() const {
     return objectName;
 }
 
-void ShoppingObject::setObjectName(const std::string name) {
+void ShoppingObject::setObjectName(const std::string& name) {
     ShoppingObject::objectName = name;
 }
 
-int ShoppingObject::getObjectNumber() const {
-    return objectNumber;
+unsigned int ShoppingObject::getObjectQuantity() const {
+    return objectQuantity;
 }
 
-void ShoppingObject::setObjectNumber(int number) {
-    ShoppingObject::objectNumber = number;
+void ShoppingObject::setObjectQuantity(int number) {
+    ShoppingObject::objectQuantity = number;
 }
 
-void ShoppingObject::printObjectInfo() {
-    std::cout << "Object name: " << objectName << std::endl
-              << "Object number: " << objectNumber << std::endl
-              << "In the cart: " << inCart << std::endl;
+void ShoppingObject::printObjectInfo() const {
+    std::cout << "Object: " << getObjectName() << std::endl
+              << "Quantity: " << getObjectQuantity() << std::endl
+              << "Bought: ";
+    if (isBought()) {
+        std::cout << "Yes" << std::endl;
+    } else {
+        std::cout << "No" << std::endl;
+    }
+    std::cout << std::endl;
 }
 
 void ShoppingObject::checkTrue() {

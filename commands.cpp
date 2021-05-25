@@ -4,8 +4,7 @@
 
 #include <iostream>
 #include <string>
-#include <limits>
-
+#include <cmath>
 
 #include "commands.h"
 
@@ -54,7 +53,7 @@ void newlist(std::list<ShoppingList>& listsdb, ShoppingList** currentlist)
 void addobject(ShoppingList *currentlist, ShoppingObject **currentObject)
 {
     std::string name;
-    int quantity;
+    unsigned int quantity;
     bool nameFound;
     if (currentlist != nullptr) {
         std::cout << "Please enter object name" << std::endl;
@@ -71,15 +70,20 @@ void addobject(ShoppingList *currentlist, ShoppingObject **currentObject)
             }
         } while (nameFound);
         std::cout << "Please enter quantity" << std::endl;
+        bool correctValue = false;
         do {
             std::cout << "Quantity: ";
             std::cin >> quantity;
             if (!std::cin) {
                 std::cout << "Invalid input. Please enter an integer" << std::endl;
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cin.clear();
+                std::cin.ignore();
             }
-        } while (!std::cin);
-        std::cin.clear();
+            else
+            {
+                correctValue = true;
+            }
+        } while (!correctValue);
         currentlist->addObject(name, quantity);
         *currentObject = &(currentlist->getShoppingList().back());
     } else {
@@ -88,7 +92,7 @@ void addobject(ShoppingList *currentlist, ShoppingObject **currentObject)
     }
 }
 
-void selectlist(std::list<ShoppingList> listsdb, ShoppingList** currentlist)
+void selectlist(const std::list<ShoppingList>& listsdb, ShoppingList** currentlist)
 {
     std::string name;
     bool nameFound;
@@ -134,27 +138,41 @@ void selectobject(ShoppingList *currentlist, ShoppingObject **currentObject)
     }
 }
 
-void printshoppinglist()
+void printshoppinglist(ShoppingList *currentlist)
 {
-
+    currentlist->printList();
 }
 
-void printobject()
+void printobject(ShoppingObject *currentObject)
 {
-
+    currentObject->printObjectInfo();
 }
 
-void checkobject()
+void checkobject(ShoppingObject *currentObject)
 {
-
+    currentObject->checkTrue();
 }
 
-void uncheckobject()
+void uncheckobject(ShoppingObject *currentObject)
 {
-
+    currentObject->checkFalse();
 }
 
-void shoppingprogress()
+void shoppingprogress(ShoppingList *currentlist)
 {
-
+    int totalElements = 0;
+    int boughtElements = 0;
+    for(const auto& element : currentlist->getShoppingList())
+    {
+        totalElements++;
+        if(element.isBought())
+        {
+            boughtElements++;
+        }
+    }
+    float percentage = (static_cast<float>(boughtElements)*static_cast<float>(100))/static_cast<float>(totalElements);
+    percentage*=100.00;
+    percentage = roundf(percentage);
+    percentage/=100.00;
+    std::cout << "Shopping progress: " << percentage << "%" << std::endl;
 }

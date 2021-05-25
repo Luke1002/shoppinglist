@@ -10,19 +10,19 @@
 
 class ShoppingObject {
 public:
-    ShoppingObject(std::string name, int number);
+    ShoppingObject(std::string  name, int number);
 
     virtual ~ShoppingObject();
 
     const std::string &getObjectName() const;
 
-    void setObjectName(std::string name);
+    void setObjectName(const std::string& name);
 
-    int getObjectNumber() const;
+    unsigned int getObjectQuantity() const;
 
-    void setObjectNumber(int number);
+    void setObjectQuantity(int number);
 
-    void printObjectInfo();
+    void printObjectInfo() const;
 
     void checkTrue();
 
@@ -34,7 +34,7 @@ protected:
 
 private:
     std::string objectName;
-    int objectNumber;
+    unsigned int objectQuantity;
     bool inCart;
 };
 

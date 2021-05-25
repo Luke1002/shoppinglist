@@ -8,8 +8,8 @@
 
 int main() {
     std::string cmd;
-    ShoppingList *currentShoppingList;
-    ShoppingObject *currentShoppingObject;
+    ShoppingList *currentShoppingList = nullptr;
+    ShoppingObject *currentShoppingObject = nullptr;
     std::list<ShoppingList> savedlists;
     std::cout << "Shopping List Manager" << std::endl
               << "by Luca Lascialfari" << std::endl
@@ -34,19 +34,19 @@ int main() {
             selectobject(currentShoppingList, &currentShoppingObject);
         }
         else if (cmd == "printshoppinglist") {
-            //TODO ADD "printshoppinglist" COMMAND
+            printshoppinglist(currentShoppingList);
         }
         else if (cmd == "printobject") {
-            //TODO ADD "printobject" COMMAND
+            printobject(currentShoppingObject);
         }
         else if (cmd == "checkobject") {
-            //TODO ADD "checkobject" COMMAND
+            checkobject(currentShoppingObject);
         }
         else if (cmd == "uncheckobject") {
-            //TODO ADD "uncheckobject" COMMAND
+            uncheckobject(currentShoppingObject);
         }
         else if (cmd == "shoppingprogress") {
-            //TODO ADD "shoppingprogress" COMMAND
+            shoppingprogress(currentShoppingList);
         }
     } while (cmd != "exit" || cmd != "Exit");
 
