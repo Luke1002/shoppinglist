@@ -61,7 +61,7 @@ void addobject(ShoppingList *currentlist, ShoppingObject **currentObject)
             nameFound = false;
             std::cout << "Name: ";
             std::getline(std::cin, name);
-            for (const auto &element : currentlist->getShoppingList()) {
+            for (auto &element : currentlist->getShoppingList()) {
                 if (name == element.getObjectName()) {
                     nameFound = true;
                     std::cout << "Name already used for another object in the same list." << std::endl
@@ -92,7 +92,7 @@ void addobject(ShoppingList *currentlist, ShoppingObject **currentObject)
     }
 }
 
-void selectlist(const std::list<ShoppingList>& listsdb, ShoppingList** currentlist)
+void selectlist(std::list<ShoppingList>& listsdb, ShoppingList** currentlist)
 {
     std::string name;
     bool nameFound;
@@ -162,7 +162,7 @@ void shoppingprogress(ShoppingList *currentlist)
 {
     int totalElements = 0;
     int boughtElements = 0;
-    for(const auto& element : currentlist->getShoppingList())
+    for(auto& element : currentlist->getShoppingList())
     {
         totalElements++;
         if(element.isBought())
@@ -175,4 +175,41 @@ void shoppingprogress(ShoppingList *currentlist)
     percentage = roundf(percentage);
     percentage/=100.00;
     std::cout << "Shopping progress: " << percentage << "%" << std::endl;
+}
+
+void deleteshoppinglist(std::list<ShoppingList>& listsdb, ShoppingList **currentlist)
+{
+    bool foundList = false;
+    std::list<ShoppingList>::const_iterator itr;
+    for(itr = listsdb.begin(); itr != listsdb.end(); itr++)
+    {
+        if((*currentlist)->getListName() == itr->getListName() && !foundList)
+        {
+            foundList = true;
+            listsdb.erase(itr);
+        }
+    }
+    if(foundList)
+    {
+        (*currentlist) = nullptr;
+    }
+}
+
+void removeobject(ShoppingList *currentlist, ShoppingObject **currentobject)
+{
+    bool foundObject = false;
+    std::list<ShoppingObject>& list = currentlist->getShoppingList();
+    std::list<ShoppingObject>::const_iterator itr;
+    for(itr = list.begin(); itr != list.end(); itr++)
+    {
+        if((*currentobject)->getObjectName() == (*itr).getObjectName() && !foundObject)
+        {
+            foundObject = true;
+            list.erase(itr);
+        }
+    }
+    if(foundObject)
+    {
+        (*currentobject) = nullptr;
+    }
 }

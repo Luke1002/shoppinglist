@@ -48,6 +48,14 @@ int main() {
         else if (cmd == "shoppingprogress") {
             shoppingprogress(currentShoppingList);
         }
+        else if(cmd == "deleteshoppinglist")
+        {
+            deleteshoppinglist(savedlists, &currentShoppingList);
+        }
+        else if(cmd == "removeobject")
+        {
+            removeobject(currentShoppingList, &currentShoppingObject);
+        }
         else
         {
             std::cout << "Command not found. Type \"help\" for a list of possible commands" << std::endl;

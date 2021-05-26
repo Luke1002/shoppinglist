@@ -17,21 +17,21 @@ ShoppingList::~ShoppingList() {
     shoppingList.clear();
 }
 
-const std::string &ShoppingList::getListName() const {
+std::string ShoppingList::getListName() const {
     return listName;
 }
 
-void ShoppingList::setListName(const std::string &name) {
+void ShoppingList::setListName(std::string &name) {
     ShoppingList::listName = name;
 }
 
-void ShoppingList::addObject(const std::string& name, unsigned int number) {
+void ShoppingList::addObject(std::string& name, unsigned int number) {
     shoppingList.emplace_back(name, number);
 }
 
 void ShoppingList::printList() {
     std::cout << listName << std::endl << std::endl;
-    for (const auto& element : shoppingList) {
+    for (auto& element : shoppingList) {
         element.printObjectInfo();
     }
 }

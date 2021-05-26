@@ -18,11 +18,11 @@ public:
 
     virtual ~ShoppingList();
 
-    const std::string &getListName() const;
+    std::basic_string<char> getListName() const;
 
-    void setListName(const std::string &name);
+    void setListName(std::string &name);
 
-    void addObject(const std::string& name, unsigned int number);
+    void addObject(std::string& name, unsigned int number);
 
     void printList();
 

@@ -14,15 +14,15 @@ ShoppingObject::ShoppingObject(std::string  name, int number) : objectName(std::
 
 ShoppingObject::~ShoppingObject() = default;
 
-const std::string &ShoppingObject::getObjectName() const {
+std::string ShoppingObject::getObjectName() const {
     return objectName;
 }
 
-void ShoppingObject::setObjectName(const std::string& name) {
+void ShoppingObject::setObjectName( std::string& name) {
     ShoppingObject::objectName = name;
 }
 
-unsigned int ShoppingObject::getObjectQuantity() const {
+unsigned int ShoppingObject::getObjectQuantity()  {
     return objectQuantity;
 }
 
@@ -30,7 +30,7 @@ void ShoppingObject::setObjectQuantity(int number) {
     ShoppingObject::objectQuantity = number;
 }
 
-void ShoppingObject::printObjectInfo() const {
+void ShoppingObject::printObjectInfo() {
     std::cout << "Object: " << getObjectName() << std::endl
               << "Quantity: " << getObjectQuantity() << std::endl
               << "Bought: ";
@@ -50,6 +50,6 @@ void ShoppingObject::checkFalse() {
     inCart = false;
 }
 
-bool ShoppingObject::isBought() const {
+bool ShoppingObject::isBought()  {
     return inCart;
 }

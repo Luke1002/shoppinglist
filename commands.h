@@ -13,7 +13,7 @@ void newlist(std::list<ShoppingList>& listsdb, ShoppingList **currentlist);
 
 void addobject(ShoppingList *currentlist, ShoppingObject **currentobject);
 
-void selectlist(const std::list<ShoppingList>& listsdb, ShoppingList** currentlist);
+void selectlist(std::list<ShoppingList>& listsdb, ShoppingList** currentlist);
 
 void selectobject(ShoppingList *currentlist, ShoppingObject **currentObject);
 
@@ -26,6 +26,10 @@ void checkobject(ShoppingObject *currentObject);
 void uncheckobject(ShoppingObject *currentObject);
 
 void shoppingprogress(ShoppingList *currentlist);
+
+void deleteshoppinglist(std::list<ShoppingList>& listsdb, ShoppingList **currentlist);
+
+void removeobject(ShoppingList *currentlist, ShoppingObject **currentobject);
 
 
 #endif //SHOPPINGLISTMANAGER_COMMANDS_H
