@@ -4,7 +4,6 @@
 
 #include <iostream>
 #include <string>
-#include <utility>
 
 #include "ShoppingObject.h"
 
@@ -34,7 +33,7 @@ void ShoppingObject::printObjectInfo() {
     std::cout << "Object: " << getObjectName() << std::endl
               << "Quantity: " << getObjectQuantity() << std::endl
               << "Bought: ";
-    if (isBought()) {
+    if (inCart) {
         std::cout << "Yes" << std::endl;
     } else {
         std::cout << "No" << std::endl;

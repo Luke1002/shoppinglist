@@ -169,6 +169,7 @@ void checkobject(ShoppingObject *currentObject)
     if(currentObject != nullptr)
     {
         currentObject->checkTrue();
+        std::cout << "Object checked" << std::endl;
     }
     else
     {
@@ -181,6 +182,7 @@ void uncheckobject(ShoppingObject *currentObject)
     if(currentObject != nullptr)
     {
         currentObject->checkFalse();
+        std::cout << "Object unchecked" << std::endl;
     }
     else
     {
