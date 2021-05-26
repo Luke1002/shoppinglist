@@ -99,10 +99,10 @@ void selectlist(std::list<ShoppingList>& listsdb, ShoppingList** currentlist, Sh
     bool nameFound;
     std::cout << "insert name of list to change to" << std::endl;
     std::getline(std::cin, name);
-    for (auto element : listsdb) {
-        if (name == element.getListName()) {
+    for (std::list<ShoppingList>::iterator itr = listsdb.begin(); itr != listsdb.end(); itr++) {
+        if (name == itr->getListName()) {
             nameFound = true;
-            *currentlist = &element;
+            *currentlist = &(*itr);
             *currentObject = nullptr;
         }
     }
@@ -121,10 +121,11 @@ void selectobject(ShoppingList *currentlist, ShoppingObject **currentObject)
     {
         std::cout << "insert name of object to change to" << std::endl;
         std::getline(std::cin, name);
-        for (auto element : currentlist->getShoppingList()) {
-            if (name == element.getObjectName()) {
+        std::list<ShoppingObject> & list = currentlist->getShoppingList();
+        for (std::list<ShoppingObject>::iterator itr = list.begin(); itr != list.end(); itr++) {
+            if (name == itr->getObjectName()) {
                 nameFound = true;
-                *currentObject = &element;
+                *currentObject = &(*itr);
             }
         }
         if (nameFound) {
