@@ -20,7 +20,9 @@ void help()
               << "printobject : print current object" << std::endl
               << "checkobject : set current object to \"Bought\"" << std::endl
               << "uncheckobject : set current object to \"To Buy\"" << std::endl
-              << "shoppingprogress : " << std::endl
+              << "shoppingprogress : shows selected list progress as percentage" << std::endl
+              << "deleteshoppinglists : delete selected shopping list" << std::endl
+              << "removeobject : remove selected object from selected shopping list" << std::endl
               << "exit : exit the program" << std::endl;
 }
 
