@@ -87,12 +87,11 @@ void addobject(ShoppingList *currentlist, ShoppingObject **currentObject)
         currentlist->addObject(name, quantity);
         *currentObject = &(currentlist->getShoppingList().back());
     } else {
-        std::cout << "No list has been selected." << std::endl
-                  << "Please select a list before trying to add an object" << std::endl;
+        std::cout << "No shopping list selected: Please select a shopping list first" << std::endl;
     }
 }
 
-void selectlist(std::list<ShoppingList>& listsdb, ShoppingList** currentlist)
+void selectlist(std::list<ShoppingList>& listsdb, ShoppingList** currentlist, ShoppingObject **currentObject)
 {
     std::string name;
     bool nameFound;
@@ -102,6 +101,7 @@ void selectlist(std::list<ShoppingList>& listsdb, ShoppingList** currentlist)
         if (name == element.getListName()) {
             nameFound = true;
             *currentlist = &element;
+            *currentObject = nullptr;
         }
     }
     if (nameFound) {
@@ -140,76 +140,126 @@ void selectobject(ShoppingList *currentlist, ShoppingObject **currentObject)
 
 void printshoppinglist(ShoppingList *currentlist)
 {
-    currentlist->printList();
+    if(currentlist!= nullptr)
+    {
+        currentlist->printList();
+    }
+    else
+    {
+        std::cout << "No shopping list selected: Please select a shopping list first" << std::endl;
+    }
 }
 
 void printobject(ShoppingObject *currentObject)
 {
-    currentObject->printObjectInfo();
+    if(currentObject != nullptr)
+    {
+        currentObject->printObjectInfo();
+    }
+    else
+    {
+        std::cout << "No object selected: Please select an object first" << std::endl;
+    }
 }
 
 void checkobject(ShoppingObject *currentObject)
 {
-    currentObject->checkTrue();
+    if(currentObject != nullptr)
+    {
+        currentObject->checkTrue();
+    }
+    else
+    {
+        std::cout << "No object selected: Please select an object first" << std::endl;
+    }
 }
 
 void uncheckobject(ShoppingObject *currentObject)
 {
-    currentObject->checkFalse();
+    if(currentObject != nullptr)
+    {
+        currentObject->checkFalse();
+    }
+    else
+    {
+        std::cout << "No object selected: Please select an object first" << std::endl;
+    }
 }
 
 void shoppingprogress(ShoppingList *currentlist)
 {
-    int totalElements = 0;
-    int boughtElements = 0;
-    for(auto& element : currentlist->getShoppingList())
+    if(currentlist != nullptr)
     {
-        totalElements++;
-        if(element.isBought())
+        int totalElements = 0;
+        int boughtElements = 0;
+        for(auto& element : currentlist->getShoppingList())
         {
-            boughtElements++;
+            totalElements++;
+            if(element.isBought())
+            {
+                boughtElements++;
+            }
         }
+        float percentage = (static_cast<float>(boughtElements)*static_cast<float>(100))/static_cast<float>(totalElements);
+        percentage*=100.00;
+        percentage = roundf(percentage);
+        percentage/=100.00;
+        std::cout << "Shopping progress: " << percentage << "%" << std::endl;
     }
-    float percentage = (static_cast<float>(boughtElements)*static_cast<float>(100))/static_cast<float>(totalElements);
-    percentage*=100.00;
-    percentage = roundf(percentage);
-    percentage/=100.00;
-    std::cout << "Shopping progress: " << percentage << "%" << std::endl;
+    else
+    {
+        std::cout << "No shopping list selected: Please select a shopping list first" << std::endl;
+    }
 }
 
-void deleteshoppinglist(std::list<ShoppingList>& listsdb, ShoppingList **currentlist)
+void deleteshoppinglist(std::list<ShoppingList>& listsdb, ShoppingList **currentlist, ShoppingObject **currentObject)
 {
-    bool foundList = false;
-    std::list<ShoppingList>::const_iterator itr;
-    for(itr = listsdb.begin(); itr != listsdb.end(); itr++)
+    if(*currentlist != nullptr)
     {
-        if((*currentlist)->getListName() == itr->getListName() && !foundList)
+        bool foundList = false;
+        std::list<ShoppingList>::const_iterator itr;
+        for(itr = listsdb.begin(); itr != listsdb.end(); itr++)
         {
-            foundList = true;
-            listsdb.erase(itr);
+            if((*currentlist)->getListName() == itr->getListName() && !foundList)
+            {
+                foundList = true;
+                listsdb.erase(itr);
+            }
+        }
+        if(foundList)
+        {
+            (*currentlist) = nullptr;
+            (*currentObject) = nullptr;
         }
     }
-    if(foundList)
+    else
     {
-        (*currentlist) = nullptr;
+        std::cout << "No shopping list selected: Please select a shopping list first" << std::endl;
     }
 }
 
 void removeobject(ShoppingList *currentlist, ShoppingObject **currentobject)
 {
-    bool foundObject = false;
-    std::list<ShoppingObject>& list = currentlist->getShoppingList();
-    std::list<ShoppingObject>::const_iterator itr;
-    for(itr = list.begin(); itr != list.end(); itr++)
+    if(*currentobject != nullptr)
     {
-        if((*currentobject)->getObjectName() == (*itr).getObjectName() && !foundObject)
+        bool foundObject = false;
+        std::list<ShoppingObject>& list = currentlist->getShoppingList();
+        std::list<ShoppingObject>::const_iterator itr;
+        for(itr = list.begin(); itr != list.end(); itr++)
         {
-            foundObject = true;
-            list.erase(itr);
+            if((*currentobject)->getObjectName() == (*itr).getObjectName() && !foundObject)
+            {
+                foundObject = true;
+                list.erase(itr);
+            }
+        }
+        if(foundObject)
+        {
+            (*currentobject) = nullptr;
         }
     }
-    if(foundObject)
+    else
     {
-        (*currentobject) = nullptr;
+        std::cout << "No object selected: Please select an object first" << std::endl;
     }
 }

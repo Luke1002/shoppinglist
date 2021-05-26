@@ -28,7 +28,7 @@ int main() {
             addobject(currentShoppingList, &currentShoppingObject);
         }
         else if (cmd == "selectshoppinglist") {
-            selectlist(savedlists,&currentShoppingList);
+            selectlist(savedlists, &currentShoppingList, &currentShoppingObject);
         }
         else if (cmd == "selectobject") {
             selectobject(currentShoppingList, &currentShoppingObject);
@@ -50,7 +50,7 @@ int main() {
         }
         else if(cmd == "deleteshoppinglist")
         {
-            deleteshoppinglist(savedlists, &currentShoppingList);
+            deleteshoppinglist(savedlists, &currentShoppingList, &currentShoppingObject);
         }
         else if(cmd == "removeobject")
         {
