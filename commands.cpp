@@ -35,7 +35,6 @@ void newlist(std::list<ShoppingList>& listsdb, ShoppingList** currentlist)
         std::cout << "Insert list name" << std::endl
                   << "Name: ";
         std::getline(std::cin, name);
-        std::cout << name << std::endl;
 
         for (auto &element : listsdb) {
             if (element.getListName() == name) {
@@ -91,6 +90,7 @@ void addobject(ShoppingList *currentlist, ShoppingObject **currentObject)
     } else {
         std::cout << "No shopping list selected: Please select a shopping list first" << std::endl;
     }
+    std::cin.ignore();
 }
 
 void selectlist(std::list<ShoppingList>& listsdb, ShoppingList** currentlist, ShoppingObject **currentObject)
