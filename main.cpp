@@ -48,6 +48,10 @@ int main() {
         else if (cmd == "shoppingprogress") {
             shoppingprogress(currentShoppingList);
         }
+        else
+        {
+            std::cout << "Command not found. Type \"help\" for a list of possible commands" << std::endl;
+        }
     } while (cmd != "exit" || cmd != "Exit");
 
     std::cout << "Closing the program..." << std::endl;
