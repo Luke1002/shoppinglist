@@ -54,9 +54,8 @@ void newlist(std::list<ShoppingList>& listsdb, ShoppingList** currentlist)
 void addobject(ShoppingList *currentlist, ShoppingObject **currentObject)
 {
     std::string name;
-    unsigned int quantity;
-    bool nameFound;
     if (currentlist != nullptr) {
+        bool nameFound;
         std::cout << "Please enter object name" << std::endl;
         do {
             nameFound = false;
@@ -72,6 +71,7 @@ void addobject(ShoppingList *currentlist, ShoppingObject **currentObject)
         } while (nameFound);
         std::cout << "Please enter quantity" << std::endl;
         bool correctValue = false;
+        unsigned int quantity;
         do {
             std::cout << "Quantity: ";
             std::cin >> quantity;
@@ -85,7 +85,7 @@ void addobject(ShoppingList *currentlist, ShoppingObject **currentObject)
                 correctValue = true;
             }
         } while (!correctValue);
-        currentlist->addObject(name, quantity);
+        currentlist->addObject(name, static_cast<int>(quantity));
         *currentObject = &(currentlist->getShoppingList().back());
     } else {
         std::cout << "No shopping list selected: Please select a shopping list first" << std::endl;
@@ -96,10 +96,10 @@ void addobject(ShoppingList *currentlist, ShoppingObject **currentObject)
 void selectlist(std::list<ShoppingList>& listsdb, ShoppingList** currentlist, ShoppingObject **currentObject)
 {
     std::string name;
-    bool nameFound;
+    bool nameFound = false;
     std::cout << "insert name of list to change to" << std::endl;
     std::getline(std::cin, name);
-    for (std::list<ShoppingList>::iterator itr = listsdb.begin(); itr != listsdb.end(); itr++) {
+    for (auto itr = listsdb.begin(); itr != listsdb.end(); ++itr) {
         if (name == itr->getListName()) {
             nameFound = true;
             *currentlist = &(*itr);
@@ -116,13 +116,13 @@ void selectlist(std::list<ShoppingList>& listsdb, ShoppingList** currentlist, Sh
 void selectobject(ShoppingList *currentlist, ShoppingObject **currentObject)
 {
     std::string name;
-    bool nameFound;
     if(currentlist != nullptr)
     {
         std::cout << "insert name of object to change to" << std::endl;
         std::getline(std::cin, name);
         std::list<ShoppingObject> & list = currentlist->getShoppingList();
-        for (std::list<ShoppingObject>::iterator itr = list.begin(); itr != list.end(); itr++) {
+        bool nameFound = false;
+        for (auto itr = list.begin(); itr != list.end(); ++itr) {
             if (name == itr->getObjectName()) {
                 nameFound = true;
                 *currentObject = &(*itr);
@@ -223,9 +223,9 @@ void deleteshoppinglist(std::list<ShoppingList>& listsdb, ShoppingList **current
     {
         bool foundList = false;
         std::list<ShoppingList>::const_iterator itr;
-        for(itr = listsdb.begin(); itr != listsdb.end(); itr++)
+        for(itr = listsdb.begin(); itr != listsdb.end() && !foundList; ++itr)
         {
-            if((*currentlist)->getListName() == itr->getListName() && !foundList)
+            if((*currentlist)->getListName() == itr->getListName())
             {
                 foundList = true;
                 listsdb.erase(itr);
@@ -250,9 +250,9 @@ void removeobject(ShoppingList *currentlist, ShoppingObject **currentobject)
         bool foundObject = false;
         std::list<ShoppingObject>& list = currentlist->getShoppingList();
         std::list<ShoppingObject>::const_iterator itr;
-        for(itr = list.begin(); itr != list.end(); itr++)
+        for(itr = list.begin(); itr != list.end() && !foundObject; ++itr)
         {
-            if((*currentobject)->getObjectName() == (*itr).getObjectName() && !foundObject)
+            if((*currentobject)->getObjectName() == (*itr).getObjectName())
             {
                 foundObject = true;
                 list.erase(itr);
