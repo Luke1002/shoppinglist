@@ -3,7 +3,6 @@
 
 
 #include "ShoppingList.h"
-#include "ShoppingObject.h"
 #include "commands.h"
 
 int main() {
