@@ -3,6 +3,6 @@ project(shoppinglistmanager)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(CMAKE_EXE_LINKER_FLAGS "-static")
+set(SOURCE_FILES main.cpp commands.cpp commands.h ShoppingObject.cpp ShoppingObject.h ShoppingList.cpp ShoppingList.h)
 
-add_executable(shoppinglistmanager main.cpp ShoppingObject.cpp ShoppingObject.h ShoppingList.cpp ShoppingList.h commands.cpp commands.h)
+add_executable(shoppinglistmanager ${SOURCE_FILES})
