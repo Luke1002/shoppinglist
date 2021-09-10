@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <memory>
 
 
 #include "ShoppingList.h"
@@ -7,8 +8,8 @@
 
 int main() {
     std::string cmd;
-    ShoppingList *currentShoppingList = nullptr;
-    ShoppingObject *currentShoppingObject = nullptr;
+    std::shared_ptr<ShoppingList> currentShoppingList = nullptr;
+    std::shared_ptr<ShoppingObject> currentShoppingObject = nullptr;
     std::list<ShoppingList> savedlists;
     std::cout << "Shopping List Manager" << std::endl
               << "by Luca Lascialfari" << std::endl
@@ -21,16 +22,16 @@ int main() {
             help();
         }
         else if (cmd == "newshoppinglist") {
-            newlist(savedlists,&currentShoppingList);
+            newlist(savedlists, currentShoppingList);
         }
         else if (cmd == "addobject") {
-            addobject(currentShoppingList, &currentShoppingObject);
+            addobject(currentShoppingList, currentShoppingObject);
         }
         else if (cmd == "selectshoppinglist") {
-            selectlist(savedlists, &currentShoppingList, &currentShoppingObject);
+            selectlist(savedlists, currentShoppingList, currentShoppingObject);
         }
         else if (cmd == "selectobject") {
-            selectobject(currentShoppingList, &currentShoppingObject);
+            selectobject(currentShoppingList, currentShoppingObject);
         }
         else if (cmd == "printshoppinglist") {
             printshoppinglist(currentShoppingList);
@@ -49,11 +50,11 @@ int main() {
         }
         else if(cmd == "deleteshoppinglist")
         {
-            deleteshoppinglist(savedlists, &currentShoppingList, &currentShoppingObject);
+            deleteshoppinglist(savedlists, currentShoppingList, currentShoppingObject);
         }
         else if(cmd == "removeobject")
         {
-            removeobject(currentShoppingList, &currentShoppingObject);
+            removeobject(currentShoppingList, currentShoppingObject);
         }
         else
         {

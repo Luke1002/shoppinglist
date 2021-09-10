@@ -9,27 +9,27 @@
 
 void help();
 
-void newlist(std::list<ShoppingList>& listsdb, ShoppingList **currentlist);
+void newlist(std::list<ShoppingList>& listsdb, std::shared_ptr<ShoppingList> &currentList);
 
-void addobject(ShoppingList *currentlist, ShoppingObject **currentobject);
+void addobject(std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<ShoppingObject> &currentObject);
 
-void selectlist(std::list<ShoppingList>& listsdb, ShoppingList** currentlist, ShoppingObject **currentObject);
+void selectlist(std::list<ShoppingList>& listsdb, std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<ShoppingObject> &currentObject);
 
-void selectobject(ShoppingList *currentlist, ShoppingObject **currentObject);
+void selectobject(const std::shared_ptr<ShoppingList>& currentList, std::shared_ptr<ShoppingObject> &currentObject);
 
-void printshoppinglist(ShoppingList *currentlist);
+void printshoppinglist(const std::shared_ptr<ShoppingList>& currentList);
 
-void printobject(ShoppingObject *currentObject);
+void printobject(const std::shared_ptr<ShoppingObject>& currentObject);
 
-void checkobject(ShoppingObject *currentObject);
+void checkobject(const std::shared_ptr<ShoppingObject>& currentObject);
 
-void uncheckobject(ShoppingObject *currentObject);
+void uncheckobject(const std::shared_ptr<ShoppingObject>& currentObject);
 
-void shoppingprogress(ShoppingList *currentlist);
+void shoppingprogress(const std::shared_ptr<ShoppingList>& currentList);
 
-void deleteshoppinglist(std::list<ShoppingList>& listsdb, ShoppingList **currentlist, ShoppingObject **currentObject);
+void deleteshoppinglist(std::list<ShoppingList>& listsdb, std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<ShoppingObject> &currentObject);
 
-void removeobject(ShoppingList *currentlist, ShoppingObject **currentobject);
+void removeobject(const std::shared_ptr<ShoppingList>& currentList, std::shared_ptr<ShoppingObject> &currentObject);
 
 
 #endif //SHOPPINGLISTMANAGER_COMMANDS_H

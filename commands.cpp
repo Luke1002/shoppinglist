@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include<memory>
 
 #include "commands.h"
 
@@ -26,7 +27,7 @@ void help()
               << "exit : exit the program" << std::endl;
 }
 
-void newlist(std::list<ShoppingList>& listsdb, ShoppingList** currentlist)
+void newlist(std::list<ShoppingList>& listsdb, std::shared_ptr<ShoppingList> &currentList)
 {
     std::string name;
     bool nameFound;
@@ -45,23 +46,23 @@ void newlist(std::list<ShoppingList>& listsdb, ShoppingList** currentlist)
         }
         if (!nameFound) {
             (listsdb).emplace_back(name);
-            *currentlist = &(listsdb.back());
+            currentList.reset(&(listsdb.back()));
         }
 
     } while (nameFound);
 }
 
-void addobject(ShoppingList *currentlist, ShoppingObject **currentObject)
+void addobject(std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<ShoppingObject> &currentObject)
 {
     std::string name;
-    if (currentlist != nullptr) {
+    if (currentList != nullptr) {
         bool nameFound;
         std::cout << "Please enter object name" << std::endl;
         do {
             nameFound = false;
             std::cout << "Name: ";
             std::getline(std::cin, name);
-            for (auto &element : currentlist->getShoppingList()) {
+            for (auto &element : currentList->getShoppingList()) {
                 if (name == element.getObjectName()) {
                     nameFound = true;
                     std::cout << "Name already used for another object in the same list." << std::endl
@@ -85,25 +86,25 @@ void addobject(ShoppingList *currentlist, ShoppingObject **currentObject)
                 correctValue = true;
             }
         } while (!correctValue);
-        currentlist->addObject(name, static_cast<int>(quantity));
-        *currentObject = &(currentlist->getShoppingList().back());
+        currentList->addObject(name, static_cast<int>(quantity));
+        currentObject.reset(&(currentList->getShoppingList().back()));
     } else {
         std::cout << "No shopping list selected: Please select a shopping list first" << std::endl;
     }
     std::cin.ignore();
 }
 
-void selectlist(std::list<ShoppingList>& listsdb, ShoppingList** currentlist, ShoppingObject **currentObject)
+void selectlist(std::list<ShoppingList>& listsdb, std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<ShoppingObject> &currentObject)
 {
     std::string name;
     bool nameFound = false;
     std::cout << "insert name of list to change to" << std::endl;
     std::getline(std::cin, name);
-    for (auto itr = listsdb.begin(); itr != listsdb.end(); ++itr) {
-        if (name == itr->getListName()) {
+    for (auto & itr : listsdb) {
+        if (name == itr.getListName()) {
             nameFound = true;
-            *currentlist = &(*itr);
-            *currentObject = nullptr;
+            currentList.reset(&itr);
+            currentObject.reset();
         }
     }
     if (nameFound) {
@@ -113,19 +114,19 @@ void selectlist(std::list<ShoppingList>& listsdb, ShoppingList** currentlist, Sh
     }
 }
 
-void selectobject(ShoppingList *currentlist, ShoppingObject **currentObject)
+void selectobject(const std::shared_ptr<ShoppingList>& currentList, std::shared_ptr<ShoppingObject> &currentObject)
 {
     std::string name;
-    if(currentlist != nullptr)
+    if(currentList != nullptr)
     {
         std::cout << "insert name of object to change to" << std::endl;
         std::getline(std::cin, name);
-        std::list<ShoppingObject> & list = currentlist->getShoppingList();
+        std::list<ShoppingObject> & list = currentList->getShoppingList();
         bool nameFound = false;
-        for (auto itr = list.begin(); itr != list.end(); ++itr) {
-            if (name == itr->getObjectName()) {
+        for (auto & itr : list) {
+            if (name == itr.getObjectName()) {
                 nameFound = true;
-                *currentObject = &(*itr);
+                currentObject.reset(&itr);
             }
         }
         if (nameFound) {
@@ -141,11 +142,11 @@ void selectobject(ShoppingList *currentlist, ShoppingObject **currentObject)
     }
 }
 
-void printshoppinglist(ShoppingList *currentlist)
+void printshoppinglist(const std::shared_ptr<ShoppingList>& currentList)
 {
-    if(currentlist!= nullptr)
+    if(currentList!= nullptr)
     {
-        currentlist->printList();
+        currentList->printList();
     }
     else
     {
@@ -153,7 +154,7 @@ void printshoppinglist(ShoppingList *currentlist)
     }
 }
 
-void printobject(ShoppingObject *currentObject)
+void printobject(const std::shared_ptr<ShoppingObject>& currentObject)
 {
     if(currentObject != nullptr)
     {
@@ -165,7 +166,7 @@ void printobject(ShoppingObject *currentObject)
     }
 }
 
-void checkobject(ShoppingObject *currentObject)
+void checkobject(const std::shared_ptr<ShoppingObject>& currentObject)
 {
     if(currentObject != nullptr)
     {
@@ -178,7 +179,7 @@ void checkobject(ShoppingObject *currentObject)
     }
 }
 
-void uncheckobject(ShoppingObject *currentObject)
+void uncheckobject(const std::shared_ptr<ShoppingObject>& currentObject)
 {
     if(currentObject != nullptr)
     {
@@ -191,13 +192,13 @@ void uncheckobject(ShoppingObject *currentObject)
     }
 }
 
-void shoppingprogress(ShoppingList *currentlist)
+void shoppingprogress(const std::shared_ptr<ShoppingList>& currentList)
 {
-    if(currentlist != nullptr)
+    if(currentList != nullptr)
     {
         int totalElements = 0;
         int boughtElements = 0;
-        for(auto& element : currentlist->getShoppingList())
+        for(auto& element : currentList->getShoppingList())
         {
             totalElements++;
             if(element.isBought())
@@ -217,15 +218,15 @@ void shoppingprogress(ShoppingList *currentlist)
     }
 }
 
-void deleteshoppinglist(std::list<ShoppingList>& listsdb, ShoppingList **currentlist, ShoppingObject **currentObject)
+void deleteshoppinglist(std::list<ShoppingList>& listsdb, std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<ShoppingObject> &currentObject)
 {
-    if(*currentlist != nullptr)
+    if(currentList != nullptr)
     {
         bool foundList = false;
         std::list<ShoppingList>::const_iterator itr;
         for(itr = listsdb.begin(); itr != listsdb.end() && !foundList; ++itr)
         {
-            if((*currentlist)->getListName() == itr->getListName())
+            if(currentList->getListName() == itr->getListName())
             {
                 foundList = true;
                 listsdb.erase(itr);
@@ -233,8 +234,8 @@ void deleteshoppinglist(std::list<ShoppingList>& listsdb, ShoppingList **current
         }
         if(foundList)
         {
-            (*currentlist) = nullptr;
-            (*currentObject) = nullptr;
+            currentList.reset();
+            currentObject.reset();
         }
     }
     else
@@ -243,16 +244,16 @@ void deleteshoppinglist(std::list<ShoppingList>& listsdb, ShoppingList **current
     }
 }
 
-void removeobject(ShoppingList *currentlist, ShoppingObject **currentobject)
+void removeobject(const std::shared_ptr<ShoppingList>& currentList, std::shared_ptr<ShoppingObject> &currentObject)
 {
-    if(*currentobject != nullptr)
+    if(currentObject != nullptr)
     {
         bool foundObject = false;
-        std::list<ShoppingObject>& list = currentlist->getShoppingList();
+        std::list<ShoppingObject>& list = currentList->getShoppingList();
         std::list<ShoppingObject>::const_iterator itr;
         for(itr = list.begin(); itr != list.end() && !foundObject; ++itr)
         {
-            if((*currentobject)->getObjectName() == (*itr).getObjectName())
+            if((currentObject)->getObjectName() == (*itr).getObjectName())
             {
                 foundObject = true;
                 list.erase(itr);
@@ -260,7 +261,7 @@ void removeobject(ShoppingList *currentlist, ShoppingObject **currentobject)
         }
         if(foundObject)
         {
-            (*currentobject) = nullptr;
+            currentObject.reset();
         }
     }
     else
