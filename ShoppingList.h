@@ -22,7 +22,7 @@ public:
 
     void setListName(std::string &name);
 
-    void addObject(std::string& name, unsigned int number);
+    void addObject(std::string name, unsigned int number, std::string category);
 
     void printList();
 

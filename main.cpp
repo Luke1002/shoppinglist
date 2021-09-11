@@ -10,6 +10,8 @@ int main() {
     std::string cmd;
     std::shared_ptr<ShoppingList> currentShoppingList = nullptr;
     std::shared_ptr<ShoppingObject> currentShoppingObject = nullptr;
+    std::list<std::string> objectCategories;
+    categorylistinit(objectCategories);
     std::list<ShoppingList> savedlists;
     std::cout << "Shopping List Manager" << std::endl
               << "by Luca Lascialfari" << std::endl
@@ -25,7 +27,7 @@ int main() {
             newlist(savedlists, currentShoppingList);
         }
         else if (cmd == "addobject") {
-            addobject(currentShoppingList, currentShoppingObject);
+            addobject(currentShoppingList, currentShoppingObject, objectCategories);
         }
         else if (cmd == "selectshoppinglist") {
             selectlist(savedlists, currentShoppingList, currentShoppingObject);

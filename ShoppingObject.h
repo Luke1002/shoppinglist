@@ -10,7 +10,7 @@
 
 class ShoppingObject {
 public:
-    ShoppingObject(std::string  name, int number);
+    ShoppingObject(std::string  name, int number, std::string category);
 
     virtual ~ShoppingObject();
 
@@ -36,6 +36,11 @@ private:
     std::string objectName;
     unsigned int objectQuantity;
     bool inCart;
+    std::string objectCategory;
+public:
+    const std::string &getObjectCategory() const;
+
+    void setObjectCategory(const std::string &objectTag);
 };
 
 

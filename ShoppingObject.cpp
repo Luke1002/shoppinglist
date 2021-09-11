@@ -7,7 +7,7 @@
 
 #include "ShoppingObject.h"
 
-ShoppingObject::ShoppingObject(std::string  name, int number) : objectName(std::move(name)), objectQuantity(number), inCart(false) {
+ShoppingObject::ShoppingObject(std::string  name, int number, std::string category) : objectName(std::move(name)), objectQuantity(number), objectCategory(std::move(category)), inCart(false) {
 
 }
 
@@ -32,6 +32,7 @@ void ShoppingObject::setObjectQuantity(int number) {
 void ShoppingObject::printObjectInfo() {
     std::cout << "Object: " << getObjectName() << std::endl
               << "Quantity: " << getObjectQuantity() << std::endl
+              << "Category: " << getObjectCategory() << std::endl
               << "Bought: ";
     if (inCart) {
         std::cout << "Yes" << std::endl;
@@ -51,4 +52,12 @@ void ShoppingObject::checkFalse() {
 
 bool ShoppingObject::isBought()  {
     return inCart;
+}
+
+const std::string &ShoppingObject::getObjectCategory() const {
+    return objectCategory;
+}
+
+void ShoppingObject::setObjectCategory(const std::string &objectTag) {
+    ShoppingObject::objectCategory = objectTag;
 }

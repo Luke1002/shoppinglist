@@ -24,8 +24,8 @@ void ShoppingList::setListName(std::string &name) {
     ShoppingList::listName = name;
 }
 
-void ShoppingList::addObject(std::string& name, unsigned int number) {
-    shoppingList.emplace_back(name, number);
+void ShoppingList::addObject(std::string name, unsigned int number, std::string category) {
+    shoppingList.emplace_back(name, number, category);
 }
 
 void ShoppingList::printList() {

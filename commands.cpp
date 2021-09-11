@@ -52,7 +52,7 @@ void newlist(std::list<ShoppingList>& listsdb, std::shared_ptr<ShoppingList> &cu
     } while (nameFound);
 }
 
-void addobject(std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<ShoppingObject> &currentObject)
+void addobject(std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<ShoppingObject> &currentObject, std::list<std::string> &categoryDb)
 {
     std::string name;
     if (currentList != nullptr) {
@@ -86,7 +86,50 @@ void addobject(std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<Shopp
                 correctValue = true;
             }
         } while (!correctValue);
-        currentList->addObject(name, static_cast<int>(quantity));
+        std::cout << "Please enter object category. Type\"list\" for a list of available categories or \"new\" to create a new category" << std::endl;
+        std::string categoryName;
+        bool categoryChosen = false;
+        bool categoryFound = false;
+        do {
+            std::cout << "Category: ";
+            std::getline(std::cin, categoryName);
+            if(categoryName == "list")
+            {
+                //print category list
+                std::cout << "Available categories: " << std::endl << std::endl;
+                for(auto itr : categoryDb)
+                {
+                    std::cout << itr << std::endl;
+                }
+            }
+            else if(categoryName == "new")
+            {
+                do {
+                    std::cout << "Enter new category name: ";
+                    std::getline(std::cin, name);
+                    categoryFound = false;
+                    std::cout << "Name: ";
+                    std::getline(std::cin, name);
+                    for (auto element : categoryDb) {
+                        if (categoryName == element) {
+                            categoryFound = true;
+                            std::cout << "Name already used for another category." << std::endl
+                                      << "Please choose a different name" << std::endl;
+                        }
+                        else
+                        {
+                            categoryDb.emplace_back(categoryName);
+                            std::cout << "New category successfully added" << std::endl;
+                        }
+                    }
+                } while (categoryFound);
+            }
+            else
+            {
+                categoryChosen = true;
+            }
+        } while (!categoryChosen);
+        currentList->addObject(name, static_cast<int>(quantity), categoryName);
         currentObject.reset(&(currentList->getShoppingList().back()));
     } else {
         std::cout << "No shopping list selected: Please select a shopping list first" << std::endl;
@@ -142,30 +185,6 @@ void selectobject(const std::shared_ptr<ShoppingList>& currentList, std::shared_
     }
 }
 
-void printshoppinglist(const std::shared_ptr<ShoppingList>& currentList)
-{
-    if(currentList!= nullptr)
-    {
-        currentList->printList();
-    }
-    else
-    {
-        std::cout << "No shopping list selected: Please select a shopping list first" << std::endl;
-    }
-}
-
-void printobject(const std::shared_ptr<ShoppingObject>& currentObject)
-{
-    if(currentObject != nullptr)
-    {
-        currentObject->printObjectInfo();
-    }
-    else
-    {
-        std::cout << "No object selected: Please select an object first" << std::endl;
-    }
-}
-
 void checkobject(const std::shared_ptr<ShoppingObject>& currentObject)
 {
     if(currentObject != nullptr)
@@ -185,6 +204,30 @@ void uncheckobject(const std::shared_ptr<ShoppingObject>& currentObject)
     {
         currentObject->checkFalse();
         std::cout << "Object unchecked" << std::endl;
+    }
+    else
+    {
+        std::cout << "No object selected: Please select an object first" << std::endl;
+    }
+}
+
+void printshoppinglist(const std::shared_ptr<ShoppingList>& currentList)
+{
+    if(currentList!= nullptr)
+    {
+        currentList->printList();
+    }
+    else
+    {
+        std::cout << "No shopping list selected: Please select a shopping list first" << std::endl;
+    }
+}
+
+void printobject(const std::shared_ptr<ShoppingObject>& currentObject)
+{
+    if(currentObject != nullptr)
+    {
+        currentObject->printObjectInfo();
     }
     else
     {
@@ -268,4 +311,36 @@ void removeobject(const std::shared_ptr<ShoppingList>& currentList, std::shared_
     {
         std::cout << "No object selected: Please select an object first" << std::endl;
     }
+}
+
+void categorylistinit(std::list<std::string> &categoryDb) {
+    categoryDb.emplace_back("Alcoholic drinks");
+    categoryDb.emplace_back("Baby products");
+    categoryDb.emplace_back("Bakery");
+    categoryDb.emplace_back("Beverages");
+    categoryDb.emplace_back("Canned foods");
+    categoryDb.emplace_back("Clothes");
+    categoryDb.emplace_back("Coffee, tea & hot chocolate");
+    categoryDb.emplace_back("Cosmetics");
+    categoryDb.emplace_back("Dairy products");
+    categoryDb.emplace_back("Electrical products");
+    categoryDb.emplace_back("Fish & seawood");
+    categoryDb.emplace_back("Frozen");
+    categoryDb.emplace_back("Grains & pasta");
+    categoryDb.emplace_back("Home & kitchen");
+    categoryDb.emplace_back("Home baking");
+    categoryDb.emplace_back("House-cleaning products");
+    categoryDb.emplace_back("Meat, poultry & sausages");
+    categoryDb.emplace_back("Newspapers");
+    categoryDb.emplace_back("Office supplies");
+    categoryDb.emplace_back("Oils");
+    categoryDb.emplace_back("Other");
+    categoryDb.emplace_back("Personal hygiene");
+    categoryDb.emplace_back("Pet supplies");
+    categoryDb.emplace_back("Pharmacy");
+    categoryDb.emplace_back("Preserves");
+    categoryDb.emplace_back("Produce");
+    categoryDb.emplace_back("Ready meals");
+    categoryDb.emplace_back("Snacks");
+    categoryDb.emplace_back("Spices, sauces & condiments");
 }
