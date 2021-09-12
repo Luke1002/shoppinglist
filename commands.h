@@ -9,13 +9,13 @@
 
 void help();
 
-void newlist(std::list<ShoppingList>& listsdb, std::shared_ptr<ShoppingList> &currentList);
+void newlist(std::list<ShoppingList>& listsdb, std::shared_ptr<ShoppingList> &currentList, std::istream &input);
 
-void addobject(std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<ShoppingObject> &currentObject, std::list<std::string> &categoryDb);
+void addobject(std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<ShoppingObject> &currentObject, std::list<std::string> &categoryDb, std::istream &input);
 
-void selectlist(std::list<ShoppingList>& listsdb, std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<ShoppingObject> &currentObject);
+void selectlist(std::list<ShoppingList>& listsdb, std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<ShoppingObject> &currentObject, std::istream &input);
 
-void selectobject(const std::shared_ptr<ShoppingList>& currentList, std::shared_ptr<ShoppingObject> &currentObject);
+void selectobject(const std::shared_ptr<ShoppingList>& currentList, std::shared_ptr<ShoppingObject> &currentObject, std::istream &input);
 
 void checkobject(const std::shared_ptr<ShoppingObject>& currentObject);
 

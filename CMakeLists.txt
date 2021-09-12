@@ -3,6 +3,10 @@ project(shoppinglistmanager)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES main.cpp commands.cpp commands.h ShoppingObject.cpp ShoppingObject.h ShoppingList.cpp ShoppingList.h)
+add_subdirectory(test)
 
-add_executable(shoppinglistmanager ${SOURCE_FILES})
+set(SOURCE_FILES commands.cpp commands.h ShoppingObject.cpp ShoppingObject.h ShoppingList.cpp ShoppingList.h main.cpp)
+
+add_executable(shoppinglistmanager main.cpp ${SOURCE_FILES})
+add_library(core ${SOURCE_FILES})
+target_link_libraries(shoppinglistmanager core)

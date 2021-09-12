@@ -26,7 +26,18 @@ unsigned int ShoppingObject::getObjectQuantity()  {
 }
 
 void ShoppingObject::setObjectQuantity(int number) {
-    ShoppingObject::objectQuantity = number;
+    if(number>0)
+    {
+        objectQuantity = number;
+    }
+    else if(number == 0)
+    {
+        objectQuantity = 1;
+    }
+    else
+    {
+        objectQuantity = -(number);
+    }
 }
 
 void ShoppingObject::printObjectInfo() {

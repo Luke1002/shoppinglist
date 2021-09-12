@@ -20,11 +20,11 @@ std::string ShoppingList::getListName() const {
     return listName;
 }
 
-void ShoppingList::setListName(std::string &name) {
+void ShoppingList::setListName(std::string name) {
     ShoppingList::listName = name;
 }
 
-void ShoppingList::addObject(std::string name, unsigned int number, std::string category) {
+void ShoppingList::addObject(std::string name, int number, std::string category) {
     shoppingList.emplace_back(name, number, category);
 }
 
