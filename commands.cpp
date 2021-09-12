@@ -12,18 +12,18 @@
 void help()
 {
     std::cout << "Command list" << std::endl
-              << "help : visualize this help screen" << std::endl
-              << "newshoppinglist : create a new shopping list" << std::endl
+              << "newlist : create a new shopping list" << std::endl
               << "addobject : add a new object in the current shopping list" << std::endl
-              << "selectshoppinglist : change current shopping list" << std::endl
+              << "selectlist : change current shopping list" << std::endl
               << "selectobject : change current object" << std::endl
-              << "printshoppinglist : print current shopping list" << std::endl
-              << "printobject : print current object" << std::endl
               << "checkobject : set current object to \"Bought\"" << std::endl
               << "uncheckobject : set current object to \"To Buy\"" << std::endl
+              << "printlist : print current shopping list" << std::endl
+              << "printobject : print current object" << std::endl
               << "shoppingprogress : shows selected list progress as percentage" << std::endl
-              << "deleteshoppinglists : delete selected shopping list" << std::endl
+              << "deletelist : delete selected shopping list" << std::endl
               << "removeobject : remove selected object from selected shopping list" << std::endl
+              << "help : visualize this help screen" << std::endl
               << "exit : exit the program" << std::endl;
 }
 
@@ -86,11 +86,13 @@ void addobject(std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<Shopp
                 correctValue = true;
             }
         } while (!correctValue);
-        std::cout << "Please enter object category. Type\"list\" for a list of available categories or \"new\" to create a new category" << std::endl;
+        std::cin.ignore();
+        std::cout << "Please enter object category. Type \"list\" for a list of available categories or \"new\" to create a new category" << std::endl;
         std::string categoryName;
-        bool categoryChosen = false;
-        bool categoryFound = false;
+        bool categoryChosen;
+        bool categoryFound;
         do {
+            categoryChosen = false;
             std::cout << "Category: ";
             std::getline(std::cin, categoryName);
             if(categoryName == "list")
@@ -134,7 +136,6 @@ void addobject(std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<Shopp
     } else {
         std::cout << "No shopping list selected: Please select a shopping list first" << std::endl;
     }
-    std::cin.ignore();
 }
 
 void selectlist(std::list<ShoppingList>& listsdb, std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<ShoppingObject> &currentObject)

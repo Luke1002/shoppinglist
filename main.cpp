@@ -20,43 +20,54 @@ int main() {
     do {
         std::cout << ">> ";
         std::getline(std::cin, cmd);
+        std::cout << std::endl;
         if (cmd == "help") {
             help();
         }
-        else if (cmd == "newshoppinglist") {
+        else if (cmd == "newlist") {
             newlist(savedlists, currentShoppingList);
+            std::cout << std::endl;
         }
         else if (cmd == "addobject") {
             addobject(currentShoppingList, currentShoppingObject, objectCategories);
+            std::cout << std::endl;
         }
-        else if (cmd == "selectshoppinglist") {
+        else if (cmd == "selectlist") {
             selectlist(savedlists, currentShoppingList, currentShoppingObject);
+            std::cout << std::endl;
         }
         else if (cmd == "selectobject") {
             selectobject(currentShoppingList, currentShoppingObject);
+            std::cout << std::endl;
         }
-        else if (cmd == "printshoppinglist") {
+        else if (cmd == "printlist") {
             printshoppinglist(currentShoppingList);
         }
         else if (cmd == "printobject") {
             printobject(currentShoppingObject);
+            std::cout << std::endl;
         }
         else if (cmd == "checkobject") {
             checkobject(currentShoppingObject);
+            std::cout << std::endl;
         }
         else if (cmd == "uncheckobject") {
             uncheckobject(currentShoppingObject);
+            std::cout << std::endl;
         }
         else if (cmd == "shoppingprogress") {
             shoppingprogress(currentShoppingList);
+            std::cout << std::endl;
         }
-        else if(cmd == "deleteshoppinglist")
+        else if(cmd == "deletelist")
         {
             deleteshoppinglist(savedlists, currentShoppingList, currentShoppingObject);
+            std::cout << std::endl;
         }
         else if(cmd == "removeobject")
         {
             removeobject(currentShoppingList, currentShoppingObject);
+            std::cout << std::endl;
         }
         else
         {

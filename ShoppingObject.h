@@ -16,7 +16,7 @@ public:
 
     std::basic_string<char> getObjectName() const;
 
-    void setObjectName(std::string& name);
+    void setObjectName(std::string name);
 
     unsigned int getObjectQuantity();
 

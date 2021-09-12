@@ -17,7 +17,7 @@ std::string ShoppingObject::getObjectName() const {
     return objectName;
 }
 
-void ShoppingObject::setObjectName( std::string& name) {
+void ShoppingObject::setObjectName( std::string name) {
     ShoppingObject::objectName = name;
 }
 
