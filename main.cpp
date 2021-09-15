@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <memory>
+#include <vector>
 
 
 #include "ShoppingList.h"
@@ -10,9 +11,9 @@ int main() {
     std::string cmd;
     std::shared_ptr<ShoppingList> currentShoppingList(nullptr);
     std::shared_ptr<ShoppingObject> currentShoppingObject(nullptr);
-    std::list<std::string> objectCategories;
+    std::vector<std::string> objectCategories;
     categorylistinit(objectCategories);
-    std::list<ShoppingList> savedlists;
+    std::vector<ShoppingList> savedlists;
     std::cout << "Shopping List Manager" << std::endl
               << "by Luca Lascialfari" << std::endl
               << std::endl
@@ -25,8 +26,7 @@ int main() {
             help();
         }
         else if (cmd == "newlist") {
-            newlist(savedlists, currentShoppingList,std::cin);
-            currentShoppingList.reset(&(savedlists.back()));
+            newlist(savedlists, currentShoppingList, currentShoppingObject,std::cin);
             std::cout << std::endl;
         }
         else if (cmd == "addobject") {

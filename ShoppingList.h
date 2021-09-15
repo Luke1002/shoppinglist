@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include <string>
-#include <list>
+#include <vector>
 
 #include "ShoppingObject.h"
 
@@ -22,17 +22,17 @@ public:
 
     void setListName(std::string name);
 
-    void addObject(std::string name, int number, std::string category);
+    void addObject(ShoppingObject &object);
 
     void printList();
 
-    std::list<ShoppingObject> &getShoppingList();
+    std::vector<ShoppingObject> &getShoppingList();
 
 protected:
 
 private:
     std::string listName;
-    std::list<ShoppingObject> shoppingList;
+    std::vector<ShoppingObject> shoppingList;
 };
 
 

@@ -19,11 +19,11 @@ TEST(ShoppingList, GetterSetter)
 TEST(ShoppingList, Functions)
 {
     ShoppingList list("lista");
-    list.addObject("Banana", 7, "Produce");
+    list.addObject(*new ShoppingObject("Banana", 7, "Produce"));
     EXPECT_EQ(list.getShoppingList().back().getObjectName(), "Banana");
     EXPECT_EQ(list.getShoppingList().back().getObjectQuantity(), 7);
     EXPECT_EQ(list.getShoppingList().back().getObjectCategory(), "Produce");
-    list.addObject("Milk", 3, "Dairy products");
+    list.addObject(*new ShoppingObject("Milk", 3, "Dairy products"));
     EXPECT_EQ(list.getShoppingList().front().getObjectName(), "Banana");
     EXPECT_EQ(list.getShoppingList().front().getObjectQuantity(), 7);
     EXPECT_EQ(list.getShoppingList().front().getObjectCategory(), "Produce");
@@ -31,7 +31,7 @@ TEST(ShoppingList, Functions)
     EXPECT_EQ(list.getShoppingList().back().getObjectName(), "Milk");
     EXPECT_EQ(list.getShoppingList().back().getObjectQuantity(), 3);
     EXPECT_EQ(list.getShoppingList().back().getObjectCategory(), "Dairy products");
-    list.addObject("Biscuits", 2, "Snacks");
+    list.addObject(*new ShoppingObject("Biscuits", 2, "Snacks"));
     int listMember = 0;
     for(auto itr : list.getShoppingList())
     {
