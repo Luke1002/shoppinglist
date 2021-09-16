@@ -124,7 +124,7 @@ void addobject(std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<Shopp
                     }
                     else
                     {
-                        categoryDb->emplace_back(categoryName);
+                        categoryDb.emplace_back(categoryName);
                         std::cout << "New category successfully added" << std::endl;
                     }
                 } while (categoryFound);
