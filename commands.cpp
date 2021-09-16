@@ -115,14 +115,17 @@ void addobject(std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<Shopp
                     for (auto element : categoryDb) {
                         if (categoryName == element) {
                             categoryFound = true;
-                            std::cout << "Name already used for another category." << std::endl
-                                      << "Please choose a different name" << std::endl;
                         }
-                        else
-                        {
-                            categoryDb.emplace_back(categoryName);
-                            std::cout << "New category successfully added" << std::endl;
-                        }
+                    }
+                    if(categoryFound)
+                    {
+                        std::cout << "Name already used for another category." << std::endl
+                                  << "Please choose a different name" << std::endl;
+                    }
+                    else
+                    {
+                        categoryDb->emplace_back(categoryName);
+                        std::cout << "New category successfully added" << std::endl;
                     }
                 } while (categoryFound);
             }
