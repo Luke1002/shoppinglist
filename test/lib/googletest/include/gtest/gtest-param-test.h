@@ -281,10 +281,10 @@ internal::ParamGenerator<T> Range(T start, T end) {
 //   list.push_back('b');
 //   return list;
 // }
-// ::std::list<char> l = GetParameterChars();
+// ::std::list<char> object = GetParameterChars();
 // INSTANTIATE_TEST_SUITE_P(CharSequence2,
 //                          CharTest,
-//                          ValuesIn(l.begin(), l.end()));
+//                          ValuesIn(object.begin(), object.end()));
 //
 template <typename ForwardIterator>
 internal::ParamGenerator<

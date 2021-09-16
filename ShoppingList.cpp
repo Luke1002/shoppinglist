@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include <string>
-#include <list>
+#include <vector>
 
 #include "ShoppingList.h"
 
@@ -20,12 +20,12 @@ std::string ShoppingList::getListName() const {
     return listName;
 }
 
-void ShoppingList::setListName(std::string &name) {
+void ShoppingList::setListName(std::string name) {
     ShoppingList::listName = name;
 }
 
-void ShoppingList::addObject(std::string name, unsigned int number, std::string category) {
-    shoppingList.emplace_back(name, number, category);
+void ShoppingList::addObject(ShoppingObject &object) {
+    shoppingList.push_back(object);
 }
 
 void ShoppingList::printList() {
@@ -35,6 +35,6 @@ void ShoppingList::printList() {
     }
 }
 
-std::list<ShoppingObject> &ShoppingList::getShoppingList() {
+std::vector<ShoppingObject> &ShoppingList::getShoppingList() {
     return shoppingList;
 }

@@ -8,7 +8,7 @@ Pkg-config is a standardised plain-text format containing
 *   necessary macro (-D) definitions
 *   further required flags (-pthread)
 *   the library (-L) path
-*   the library (-l) to link to
+*   the library (-object) to link to
 
 All current build systems support pkg-config in one way or another. For all
 examples here we assume you want to compile the sample

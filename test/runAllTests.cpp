@@ -1,11 +1,10 @@
 //
-// Created by lucal on 12/09/2021.
+// Created by luke1002 on 9/12/21.
 //
+#include "gtest/gtest.h"
 
-#include <gtest/gtest.h>
-
-int main(int argc, char **argv)
+int main()
 {
-    testing::InitGoogleTest(&argc, argv);
+    testing::InitGoogleTest();
     return RUN_ALL_TESTS();
 }

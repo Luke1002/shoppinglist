@@ -1429,7 +1429,7 @@ class GTEST_API_ Mutex {
 // conflict with a macro named MutexLock, which is defined on some
 // platforms. That macro is used as a defensive measure to prevent against
 // inadvertent misuses of MutexLock like "MutexLock(&mu)" rather than
-// "MutexLock l(&mu)".  Hence the typedef trick below.
+// "MutexLock object(&mu)".  Hence the typedef trick below.
 class GTestMutexLock {
  public:
   explicit GTestMutexLock(Mutex* mutex)
@@ -1718,7 +1718,7 @@ class Mutex : public MutexBase {
 // conflict with a macro named MutexLock, which is defined on some
 // platforms. That macro is used as a defensive measure to prevent against
 // inadvertent misuses of MutexLock like "MutexLock(&mu)" rather than
-// "MutexLock l(&mu)".  Hence the typedef trick below.
+// "MutexLock object(&mu)".  Hence the typedef trick below.
 class GTestMutexLock {
  public:
   explicit GTestMutexLock(MutexBase* mutex)
@@ -1876,7 +1876,7 @@ class Mutex {
 // conflict with a macro named MutexLock, which is defined on some
 // platforms. That macro is used as a defensive measure to prevent against
 // inadvertent misuses of MutexLock like "MutexLock(&mu)" rather than
-// "MutexLock l(&mu)".  Hence the typedef trick below.
+// "MutexLock object(&mu)".  Hence the typedef trick below.
 class GTestMutexLock {
  public:
   explicit GTestMutexLock(Mutex*) {}  // NOLINT

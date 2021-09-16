@@ -6,6 +6,7 @@
 #include <string>
 #include <cmath>
 #include<memory>
+#include<vector>
 
 #include "commands.h"
 
@@ -27,7 +28,7 @@ void help()
               << "exit : exit the program" << std::endl;
 }
 
-void newlist(std::list<ShoppingList>& listsdb, std::shared_ptr<ShoppingList> &currentList)
+void newlist(std::vector<ShoppingList>& listsdb, std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<ShoppingObject> &currentObject, std::istream &input)
 {
     std::string name;
     bool nameFound;
@@ -35,7 +36,7 @@ void newlist(std::list<ShoppingList>& listsdb, std::shared_ptr<ShoppingList> &cu
         nameFound = false;
         std::cout << "Insert list name" << std::endl
                   << "Name: ";
-        std::getline(std::cin, name);
+        std::getline(input, name);
 
         for (auto &element : listsdb) {
             if (element.getListName() == name) {
@@ -45,14 +46,15 @@ void newlist(std::list<ShoppingList>& listsdb, std::shared_ptr<ShoppingList> &cu
             }
         }
         if (!nameFound) {
-            (listsdb).emplace_back(name);
-            currentList.reset(&(listsdb.back()));
+            currentList = std::make_shared<ShoppingList>(name);
+            (listsdb).push_back(*currentList);
+            currentObject.reset();
         }
 
     } while (nameFound);
 }
 
-void addobject(std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<ShoppingObject> &currentObject, std::list<std::string> &categoryDb)
+void addobject(std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<ShoppingObject> &currentObject, std::vector<std::string> &categoryDb, std::istream &input)
 {
     std::string name;
     if (currentList != nullptr) {
@@ -61,8 +63,8 @@ void addobject(std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<Shopp
         do {
             nameFound = false;
             std::cout << "Name: ";
-            std::getline(std::cin, name);
-            for (auto &element : currentList->getShoppingList()) {
+            std::getline(input, name);
+            for (auto element : currentList->getShoppingList()) {
                 if (name == element.getObjectName()) {
                     nameFound = true;
                     std::cout << "Name already used for another object in the same list." << std::endl
@@ -75,18 +77,18 @@ void addobject(std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<Shopp
         unsigned int quantity;
         do {
             std::cout << "Quantity: ";
-            std::cin >> quantity;
-            if (!std::cin) {
+            input >> quantity;
+            if (!input) {
                 std::cout << "Invalid input. Please enter an integer" << std::endl;
-                std::cin.clear();
-                std::cin.ignore();
+                input.clear();
+                input.ignore();
             }
             else
             {
                 correctValue = true;
             }
         } while (!correctValue);
-        std::cin.ignore();
+        input.ignore();
         std::cout << "Please enter object category. Type \"list\" for a list of available categories or \"new\" to create a new category" << std::endl;
         std::string categoryName;
         bool categoryChosen;
@@ -94,10 +96,9 @@ void addobject(std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<Shopp
         do {
             categoryChosen = false;
             std::cout << "Category: ";
-            std::getline(std::cin, categoryName);
+            std::getline(input, categoryName);
             if(categoryName == "list")
             {
-                //print category list
                 std::cout << "Available categories: " << std::endl << std::endl;
                 for(auto itr : categoryDb)
                 {
@@ -108,10 +109,9 @@ void addobject(std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<Shopp
             {
                 do {
                     std::cout << "Enter new category name: ";
-                    std::getline(std::cin, name);
                     categoryFound = false;
                     std::cout << "Name: ";
-                    std::getline(std::cin, name);
+                    std::getline(input, name);
                     for (auto element : categoryDb) {
                         if (categoryName == element) {
                             categoryFound = true;
@@ -128,52 +128,73 @@ void addobject(std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<Shopp
             }
             else
             {
-                categoryChosen = true;
+                for(auto itr : categoryDb)
+                {
+                    if(itr == categoryName)
+                    {
+                        categoryChosen = true;
+                    }
+                }
+                if(!categoryChosen)
+                {
+                    std::cout << "Category not found. Type \"list\" for a list of available categories or \"new\" to create a new category" << std::endl;
+                }
             }
         } while (!categoryChosen);
-        currentList->addObject(name, static_cast<int>(quantity), categoryName);
-        currentObject.reset(&(currentList->getShoppingList().back()));
+        currentObject = (std::make_shared<ShoppingObject>(name, static_cast<int>(quantity), categoryName));
+        currentList->addObject(*(currentObject));
     } else {
         std::cout << "No shopping list selected: Please select a shopping list first" << std::endl;
     }
 }
 
-void selectlist(std::list<ShoppingList>& listsdb, std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<ShoppingObject> &currentObject)
+void selectlist(std::vector<ShoppingList>& listsdb, std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<ShoppingObject> &currentObject, std::istream &input)
 {
+    int position;
+    int x = 0;
     std::string name;
     bool nameFound = false;
     std::cout << "insert name of list to change to" << std::endl;
-    std::getline(std::cin, name);
-    for (auto & itr : listsdb) {
-        if (name == itr.getListName()) {
+    std::getline(input, name);
+    for (auto itr = listsdb.begin(); itr != listsdb.end() && !nameFound; ++itr) {
+        if (name == itr->getListName()) {
             nameFound = true;
-            currentList.reset(&itr);
-            currentObject.reset();
+            position = x;
         }
+        x++;
     }
+
     if (nameFound) {
-        std::cout << "Selected list successfully changed" << std::endl;
+        std::shared_ptr<ShoppingList> tempPtr = std::make_shared<ShoppingList>(listsdb.at(position));
+        currentList.swap(tempPtr);
+        currentObject.reset();
+        std::cout << "Selected list successfully changed " << std::endl;
     } else {
         std::cout << "Shopping list not found. Please check the list name spelling" << std::endl;
     }
 }
 
-void selectobject(const std::shared_ptr<ShoppingList>& currentList, std::shared_ptr<ShoppingObject> &currentObject)
+void selectobject(const std::shared_ptr<ShoppingList>& currentList, std::shared_ptr<ShoppingObject> &currentObject, std::istream &input)
 {
+    int position;
+    int x = 0;
     std::string name;
+
     if(currentList != nullptr)
     {
         std::cout << "insert name of object to change to" << std::endl;
-        std::getline(std::cin, name);
-        std::list<ShoppingObject> & list = currentList->getShoppingList();
+        std::getline(input, name);
         bool nameFound = false;
-        for (auto & itr : list) {
-            if (name == itr.getObjectName()) {
+        for (auto itr = currentList->getShoppingList().begin(); itr != currentList->getShoppingList().end() && !nameFound; ++itr) {
+            if (name == itr->getObjectName()) {
                 nameFound = true;
-                currentObject.reset(&itr);
+                position = x;
             }
+            x++;
         }
         if (nameFound) {
+            std::shared_ptr<ShoppingObject> tempPtr = std::make_shared<ShoppingObject>(currentList->getShoppingList().at(position));
+            currentObject.swap(tempPtr);
             std::cout << "Selected object successfully changed" << std::endl;
         } else {
             std::cout << "Object not found. Please check the object name spelling" << std::endl;
@@ -262,18 +283,18 @@ void shoppingprogress(const std::shared_ptr<ShoppingList>& currentList)
     }
 }
 
-void deleteshoppinglist(std::list<ShoppingList>& listsdb, std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<ShoppingObject> &currentObject)
+void deleteshoppinglist(std::vector<ShoppingList>& listsdb, std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<ShoppingObject> &currentObject)
 {
     if(currentList != nullptr)
     {
         bool foundList = false;
-        std::list<ShoppingList>::const_iterator itr;
+        std::vector<ShoppingList>::const_iterator itr;
         for(itr = listsdb.begin(); itr != listsdb.end() && !foundList; ++itr)
         {
             if(currentList->getListName() == itr->getListName())
             {
                 foundList = true;
-                listsdb.erase(itr);
+                itr = listsdb.erase(itr);
             }
         }
         if(foundList)
@@ -293,14 +314,14 @@ void removeobject(const std::shared_ptr<ShoppingList>& currentList, std::shared_
     if(currentObject != nullptr)
     {
         bool foundObject = false;
-        std::list<ShoppingObject>& list = currentList->getShoppingList();
-        std::list<ShoppingObject>::const_iterator itr;
+        std::vector<ShoppingObject>& list = currentList->getShoppingList();
+        std::vector<ShoppingObject>::const_iterator itr;
         for(itr = list.begin(); itr != list.end() && !foundObject; ++itr)
         {
             if((currentObject)->getObjectName() == (*itr).getObjectName())
             {
                 foundObject = true;
-                list.erase(itr);
+                itr = list.erase(itr);
             }
         }
         if(foundObject)
@@ -314,7 +335,7 @@ void removeobject(const std::shared_ptr<ShoppingList>& currentList, std::shared_
     }
 }
 
-void categorylistinit(std::list<std::string> &categoryDb) {
+void categorylistinit(std::vector<std::string> &categoryDb) {
     categoryDb.emplace_back("Alcoholic drinks");
     categoryDb.emplace_back("Baby products");
     categoryDb.emplace_back("Bakery");
