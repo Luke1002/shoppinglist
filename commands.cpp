@@ -7,74 +7,64 @@
 #include <cmath>
 #include<memory>
 #include<vector>
+#include <sstream>
 
 #include "commands.h"
 
-void help()
-{
+void help() {
     std::cout << "Command list" << std::endl
               << "newlist : create a new shopping list" << std::endl
-              << "addobject : add a new object in the current shopping list" << std::endl
+              << "addobject : add a new object in the selected shopping list" << std::endl
               << "selectlist : change current shopping list" << std::endl
-              << "selectobject : change current object" << std::endl
-              << "checkobject : set current object to \"Bought\"" << std::endl
-              << "uncheckobject : set current object to \"To Buy\"" << std::endl
+              << "checkobject : set an object to \"Bought\"" << std::endl
+              << "uncheckobject : set an object to \"To Buy\"" << std::endl
               << "printlist : print current shopping list" << std::endl
-              << "printobject : print current object" << std::endl
+              << "printobject : print an object of selected list" << std::endl
               << "shoppingprogress : shows selected list progress as percentage" << std::endl
               << "deletelist : delete selected shopping list" << std::endl
-              << "removeobject : remove selected object from selected shopping list" << std::endl
+              << "removeobject : remove an object from selected shopping list" << std::endl
               << "help : visualize this help screen" << std::endl
               << "exit : exit the program" << std::endl;
 }
 
-void newlist(std::vector<ShoppingList>& listsdb, std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<ShoppingObject> &currentObject, std::istream &input)
-{
+void
+newlist(std::map<std::string, ShoppingList> &listsdb, std::string &currentList, std::istream &input) {
     std::string name;
-    bool nameFound;
-    do {
-        nameFound = false;
-        std::cout << "Insert list name" << std::endl
-                  << "Name: ";
-        std::getline(input, name);
-
-        for (auto &element : listsdb) {
-            if (element.getListName() == name) {
-                nameFound = true;
-                std::cout << "Name already used for another list." << std::endl
-                          << "Please choose a different name" << std::endl;
-            }
-        }
-        if (!nameFound) {
-            currentList = std::make_shared<ShoppingList>(name);
-            (listsdb).push_back(*currentList);
-            currentObject.reset();
-        }
-
-    } while (nameFound);
+    std::cout << "Insert list name" << std::endl
+              << "Name: ";
+    std::getline(input, name);
+    if (listsdb.find(name) == listsdb.end()) {
+        listsdb.insert(std::make_pair(name, ShoppingList(name)));
+        currentList = name;
+    } else {
+        std::cout << "Name already used for another list. Please choose a different name" << std::endl;
+    }
 }
 
-void addobject(std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<ShoppingObject> &currentObject, std::vector<std::string> &categoryDb, std::istream &input)
-{
+void
+addobject(std::map<std::string, ShoppingList> &listsdb, std::string &currentList, std::vector<std::string> &categoryDb,
+          std::istream &input) {
     std::string name;
-    if (currentList != nullptr) {
+    ShoppingList &listPtr = listsdb.find(currentList)->second;
+    if (!currentList.empty()) {
         bool nameFound;
         std::cout << "Please enter object name" << std::endl;
         do {
             nameFound = false;
             std::cout << "Name: ";
             std::getline(input, name);
-            for (auto element : currentList->getShoppingList()) {
-                if (name == element.getObjectName()) {
-                    nameFound = true;
-                    std::cout << "Name already used for another object in the same list." << std::endl
-                              << "Please choose a different name" << std::endl;
-                }
+            std::unique_ptr<std::map<std::string, ShoppingObject>> list = std::make_unique<std::map<std::string, ShoppingObject>>(
+                    listPtr.getShoppingList());
+            auto itr = list->find(name);
+            if (itr != list->end()) {
+                nameFound = true;
+                std::cout << "Name already used for another object in the same list." << std::endl
+                          << "Please choose itr different name" << std::endl;
             }
         } while (nameFound);
-        std::cout << "Please enter quantity" << std::endl;
+        std::cout << "Please enter quantity. Enter \"0\" to not select a quantity" << std::endl;
         bool correctValue = false;
-        unsigned int quantity;
+        int quantity;
         do {
             std::cout << "Quantity: ";
             input >> quantity;
@@ -82,14 +72,14 @@ void addobject(std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<Shopp
                 std::cout << "Invalid input. Please enter an integer" << std::endl;
                 input.clear();
                 input.ignore();
-            }
-            else
-            {
+            } else {
                 correctValue = true;
             }
         } while (!correctValue);
         input.ignore();
-        std::cout << "Please enter object category. Type \"list\" for a list of available categories or \"new\" to create a new category" << std::endl;
+        std::cout
+                << "Please enter object category. Type \"list\" for a list of available categories or \"new\" to create a new category"
+                << std::endl;
         std::string categoryName;
         bool categoryChosen;
         bool categoryFound;
@@ -97,245 +87,232 @@ void addobject(std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<Shopp
             categoryChosen = false;
             std::cout << "Category: ";
             std::getline(input, categoryName);
-            if(categoryName == "list")
-            {
+            if (categoryName == "list") {
                 std::cout << "Available categories: " << std::endl << std::endl;
-                for(auto itr : categoryDb)
-                {
+                for (auto itr: categoryDb) {
                     std::cout << itr << std::endl;
                 }
-            }
-            else if(categoryName == "new")
-            {
+            } else if (categoryName == "new") {
                 do {
                     std::cout << "Enter new category name: ";
                     categoryFound = false;
                     std::cout << "Name: ";
                     std::getline(input, name);
-                    for (auto element : categoryDb) {
-                        if (categoryName == element) {
+                    for (auto itr: categoryDb) {
+                        if (categoryName == itr) {
                             categoryFound = true;
                         }
                     }
-                    if(categoryFound)
-                    {
+                    if (categoryFound) {
                         std::cout << "Name already used for another category." << std::endl
                                   << "Please choose a different name" << std::endl;
-                    }
-                    else
-                    {
+                    } else {
                         categoryDb.emplace_back(categoryName);
                         std::cout << "New category successfully added" << std::endl;
                     }
                 } while (categoryFound);
-            }
-            else
-            {
-                for(auto itr : categoryDb)
-                {
-                    if(itr == categoryName)
-                    {
+            } else {
+                for (auto itr: categoryDb) {
+                    if (itr == categoryName) {
                         categoryChosen = true;
                     }
                 }
-                if(!categoryChosen)
-                {
-                    std::cout << "Category not found. Type \"list\" for a list of available categories or \"new\" to create a new category" << std::endl;
+                if (!categoryChosen) {
+                    std::cout
+                            << "Category not found. Type \"list\" for a list of available categories or \"new\" to create a new category"
+                            << std::endl;
                 }
             }
         } while (!categoryChosen);
-        currentObject = (std::make_shared<ShoppingObject>(name, static_cast<int>(quantity), categoryName));
-        currentList->addObject(*(currentObject));
+        listPtr.addObject(name, quantity, categoryName);
     } else {
         std::cout << "No shopping list selected: Please select a shopping list first" << std::endl;
     }
 }
 
-void selectlist(std::vector<ShoppingList>& listsdb, std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<ShoppingObject> &currentObject, std::istream &input)
-{
-    int position;
-    int x = 0;
+void selectlist(std::map<std::string, ShoppingList> &listsdb, std::string &currentList,
+                std::istream &input) {
     std::string name;
-    bool nameFound = false;
     std::cout << "insert name of list to change to" << std::endl;
     std::getline(input, name);
-    for (auto itr = listsdb.begin(); itr != listsdb.end() && !nameFound; ++itr) {
-        if (name == itr->getListName()) {
-            nameFound = true;
-            position = x;
-        }
-        x++;
-    }
-
-    if (nameFound) {
-        std::shared_ptr<ShoppingList> tempPtr = std::make_shared<ShoppingList>(listsdb.at(position));
-        currentList.swap(tempPtr);
-        currentObject.reset();
-        std::cout << "Selected list successfully changed " << std::endl;
+    if (listsdb.find(name) != listsdb.end()) {
+        currentList = listsdb.find(name)->first;
     } else {
         std::cout << "Shopping list not found. Please check the list name spelling" << std::endl;
     }
 }
 
-void selectobject(const std::shared_ptr<ShoppingList>& currentList, std::shared_ptr<ShoppingObject> &currentObject, std::istream &input)
-{
-    int position;
-    int x = 0;
-    std::string name;
-
-    if(currentList != nullptr)
-    {
-        std::cout << "insert name of object to change to" << std::endl;
-        std::getline(input, name);
-        bool nameFound = false;
-        for (auto itr = currentList->getShoppingList().begin(); itr != currentList->getShoppingList().end() && !nameFound; ++itr) {
-            if (name == itr->getObjectName()) {
-                nameFound = true;
-                position = x;
+void checkobject(std::map<std::string, ShoppingList> &listsdb, std::string &currentList, std::istream &input) {
+    ShoppingList &listPtr = listsdb.find(currentList)->second;
+    if (!currentList.empty()) {
+        if (!(listPtr.getShoppingList().empty())) {
+            std::string name;
+            std::cout << "insert name of object to check" << std::endl;
+            std::getline(input, name);
+            bool success = listPtr.setBought(name, true);
+            if (success) {
+                std::cout << "Object successfully checked" << std::endl;
+            } else {
+                std::cout << "Object not found. Please check the object name spelling" << std::endl;
             }
-            x++;
-        }
-        if (nameFound) {
-            std::shared_ptr<ShoppingObject> tempPtr = std::make_shared<ShoppingObject>(currentList->getShoppingList().at(position));
-            currentObject.swap(tempPtr);
-            std::cout << "Selected object successfully changed" << std::endl;
         } else {
-            std::cout << "Object not found. Please check the object name spelling" << std::endl;
+            std::cout << "Selected list is empty" << std::endl;
         }
-    }
-    else
-    {
-        std::cout << "No list has been selected." << std::endl
-                  << "Please select a list before trying to select an object" << std::endl;
+
+    } else {
+        std::cout << "No list has been selected." << std::endl;
     }
 }
 
-void checkobject(const std::shared_ptr<ShoppingObject>& currentObject)
-{
-    if(currentObject != nullptr)
-    {
-        currentObject->checkTrue();
-        std::cout << "Object checked" << std::endl;
-    }
-    else
-    {
-        std::cout << "No object selected: Please select an object first" << std::endl;
+void uncheckobject(std::map<std::string, ShoppingList> &listsdb, std::string &currentList, std::istream &input) {
+    ShoppingList &listPtr = listsdb.find(currentList)->second;
+    if (!currentList.empty()) {
+        if (!(listPtr.getShoppingList().empty())) {
+            std::string name;
+            std::cout << "insert name of object to uncheck" << std::endl;
+            std::getline(input, name);
+            bool success = listPtr.setBought(name, false);
+            if (success) {
+                std::cout << "Object successfully unchecked" << std::endl;
+            } else {
+                std::cout << "Object not found. Please check the object name spelling" << std::endl;
+            }
+        } else {
+            std::cout << "Selected list is empty" << std::endl;
+        }
+
+    } else {
+        std::cout << "No list has been selected." << std::endl;
     }
 }
 
-void uncheckobject(const std::shared_ptr<ShoppingObject>& currentObject)
-{
-    if(currentObject != nullptr)
-    {
-        currentObject->checkFalse();
-        std::cout << "Object unchecked" << std::endl;
-    }
-    else
-    {
-        std::cout << "No object selected: Please select an object first" << std::endl;
-    }
-}
-
-void printshoppinglist(const std::shared_ptr<ShoppingList>& currentList)
-{
-    if(currentList!= nullptr)
-    {
-        currentList->printList();
-    }
-    else
-    {
+void printshoppinglist(std::map<std::string, ShoppingList> &listsdb, std::string &currentList) {
+    ShoppingList &listPtr = listsdb.find(currentList)->second;
+    if (!currentList.empty()) {
+        std::cout << listPtr.getListName() << std::endl << std::endl;
+        std::stringstream objectOutput;
+        std::string tmp;
+        for (auto itr: listPtr.getShoppingList()) {
+            objectOutput = itr.second.toString();
+            std::getline(objectOutput, tmp);
+            std::cout << "Object: " << tmp << std::endl;
+            std::getline(objectOutput, tmp);
+            if (tmp != "0") {
+                std::cout << "Quantity: " << tmp << std::endl;
+            }
+            std::getline(objectOutput, tmp);
+            std::cout << "Category: " << tmp << std::endl;
+            std::getline(objectOutput, tmp);
+            std::cout << "Bought: ";
+            if (itr.second.isInCart()) {
+                std::cout << "Yes";
+            } else {
+                std::cout << "No";
+            }
+            std::cout << std::endl << std::endl;
+        }
+    } else {
         std::cout << "No shopping list selected: Please select a shopping list first" << std::endl;
     }
 }
 
-void printobject(const std::shared_ptr<ShoppingObject>& currentObject)
-{
-    if(currentObject != nullptr)
-    {
-        currentObject->printObjectInfo();
-    }
-    else
-    {
-        std::cout << "No object selected: Please select an object first" << std::endl;
+void printobject(std::map<std::string, ShoppingList> &listsdb, std::string &currentList, std::istream &input) {
+    ShoppingList &listPtr = listsdb.find(currentList)->second;
+    if (!currentList.empty()) {
+        if (!(listPtr.getShoppingList().empty())) {
+            std::string name;
+            std::cout << "insert name of object to print" << std::endl;
+            std::getline(input, name);
+            std::unique_ptr<std::map<std::string, ShoppingObject>> list = std::make_unique<std::map<std::string, ShoppingObject>>(
+                    listPtr.getShoppingList());
+            auto itr = list->find(name);
+            if (itr != list->end()) {
+                std::stringstream objectOutput = listPtr.getShoppingList().find(name)->second.toString();
+                std::string tmp;
+                std::getline(objectOutput, tmp);
+                std::cout << std::endl << "Object: " << tmp << std::endl;
+                std::getline(objectOutput, tmp);
+                if (tmp != "0") {
+                    std::cout << "Quantity: " << tmp << std::endl;
+                }
+                std::getline(objectOutput, tmp);
+                std::cout << "Category: " << tmp << std::endl;
+                std::getline(objectOutput, tmp);
+                std::cout << "Bought: ";
+                if (listPtr.getShoppingList().find(name)->second.isInCart()) {
+                    std::cout << "Yes";
+                } else {
+                    std::cout << "No";
+                }
+                std::cout << std::endl << std::endl;
+            } else {
+                std::cout << "Object not found. Please check the object name spelling" << std::endl;
+            }
+        } else {
+            std::cout << "Selected list is empty" << std::endl;
+        }
+
+    } else {
+        std::cout << "No list has been selected." << std::endl;
     }
 }
 
-void shoppingprogress(const std::shared_ptr<ShoppingList>& currentList)
-{
-    if(currentList != nullptr)
-    {
-        int totalElements = 0;
-        int boughtElements = 0;
-        for(auto& element : currentList->getShoppingList())
-        {
-            totalElements++;
-            if(element.isBought())
-            {
-                boughtElements++;
+void shoppingprogress(std::map<std::string, ShoppingList> &listsdb, std::string &currentList) {
+    ShoppingList &listPtr = listsdb.find(currentList)->second;
+    if (!currentList.empty()) {
+        if (!(listPtr.getShoppingList().empty())) {
+            int totalElements = 0;
+            int boughtElements = 0;
+            for (auto &element: listPtr.getShoppingList()) {
+                totalElements++;
+                if (element.second.isInCart()) {
+                    boughtElements++;
+                }
             }
+            float percentage =
+                    (static_cast<float>(boughtElements) * static_cast<float>(100)) / static_cast<float>(totalElements);
+            percentage *= 100.00;
+            percentage = roundf(percentage);
+            percentage /= 100.00;
+            std::cout << "Shopping progress: " << percentage << "%" << std::endl;
+        } else {
+            std::cout << "Selected list is empty" << std::endl;
         }
-        float percentage = (static_cast<float>(boughtElements)*static_cast<float>(100))/static_cast<float>(totalElements);
-        percentage*=100.00;
-        percentage = roundf(percentage);
-        percentage/=100.00;
-        std::cout << "Shopping progress: " << percentage << "%" << std::endl;
-    }
-    else
-    {
+    } else {
         std::cout << "No shopping list selected: Please select a shopping list first" << std::endl;
     }
 }
 
-void deleteshoppinglist(std::vector<ShoppingList>& listsdb, std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<ShoppingObject> &currentObject)
-{
-    if(currentList != nullptr)
-    {
-        bool foundList = false;
-        std::vector<ShoppingList>::const_iterator itr;
-        for(itr = listsdb.begin(); itr != listsdb.end() && !foundList; ++itr)
-        {
-            if(currentList->getListName() == itr->getListName())
-            {
-                foundList = true;
-                itr = listsdb.erase(itr);
-            }
-        }
-        if(foundList)
-        {
-            currentList.reset();
-            currentObject.reset();
-        }
-    }
-    else
-    {
+void deleteshoppinglist(std::map<std::string, ShoppingList> &listsdb, std::string &currentList) {
+    ShoppingList &listPtr = listsdb.find(currentList)->second;
+    if (!currentList.empty()) {
+        listsdb.erase(listPtr.getListName());
+        currentList = "";
+    } else {
         std::cout << "No shopping list selected: Please select a shopping list first" << std::endl;
     }
 }
 
-void removeobject(const std::shared_ptr<ShoppingList>& currentList, std::shared_ptr<ShoppingObject> &currentObject)
-{
-    if(currentObject != nullptr)
-    {
-        bool foundObject = false;
-        std::vector<ShoppingObject>& list = currentList->getShoppingList();
-        std::vector<ShoppingObject>::const_iterator itr;
-        for(itr = list.begin(); itr != list.end() && !foundObject; ++itr)
-        {
-            if((currentObject)->getObjectName() == (*itr).getObjectName())
-            {
-                foundObject = true;
-                itr = list.erase(itr);
+void removeobject(std::map<std::string, ShoppingList> &listsdb, std::string &currentList, std::istream &input) {
+    ShoppingList &listPtr = listsdb.find(currentList)->second;
+    if (!currentList.empty()) {
+        if (listPtr.getShoppingList().empty()) {
+            std::cout << "Selected list is empty" << std::endl;
+        } else {
+            std::string name;
+            std::cout << "insert name of object to delete" << std::endl;
+            std::getline(input, name);
+            bool success = listPtr.removeObject(name);
+            if (success) {
+                std::cout << "Object successfully removed" << std::endl;
+            } else {
+                std::cout << "Object not found. Please check the object name spelling" << std::endl;
             }
         }
-        if(foundObject)
-        {
-            currentObject.reset();
-        }
+    } else {
+        std::cout << "No shopping list selected: Please select a shopping list first" << std::endl;
     }
-    else
-    {
-        std::cout << "No object selected: Please select an object first" << std::endl;
-    }
+
 }
 
 void categorylistinit(std::vector<std::string> &categoryDb) {

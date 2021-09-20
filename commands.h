@@ -10,27 +10,25 @@
 
 void help();
 
-void newlist(std::vector<ShoppingList>& listsdb, std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<ShoppingObject> &currentObject, std::istream &input);
+void newlist(std::map<std::string, ShoppingList>& listsdb, std::string &currentList, std::istream &input);
 
-void addobject(std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<ShoppingObject> &currentObject, std::vector<std::string> &categoryDb, std::istream &input);
+void addobject(std::map<std::string, ShoppingList> &listsdb, std::string &currentList, std::vector<std::string> &categoryDb, std::istream &input);
 
-void selectlist(std::vector<ShoppingList>& listsdb, std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<ShoppingObject> &currentObject, std::istream &input);
+void selectlist(std::map<std::string, ShoppingList> &listsdb, std::string &currentList, std::istream &input);
 
-void selectobject(const std::shared_ptr<ShoppingList>& currentList, std::shared_ptr<ShoppingObject> &currentObject, std::istream &input);
+void checkobject(std::map<std::string, ShoppingList> &listsdb, std::string &currentList, std::istream &input);
 
-void checkobject(const std::shared_ptr<ShoppingObject>& currentObject);
+void uncheckobject(std::map<std::string, ShoppingList> &listsdb, std::string &currentList, std::istream &input);
 
-void uncheckobject(const std::shared_ptr<ShoppingObject>& currentObject);
+void printshoppinglist(std::map<std::string, ShoppingList> &listsdb, std::string &currentList);
 
-void printshoppinglist(const std::shared_ptr<ShoppingList>& currentList);
+void printobject(std::map<std::string, ShoppingList> &listsdb, std::string &currentList, std::istream &input);
 
-void printobject(const std::shared_ptr<ShoppingObject>& currentObject);
+void shoppingprogress(std::map<std::string, ShoppingList> &listsdb, std::string &currentList);
 
-void shoppingprogress(const std::shared_ptr<ShoppingList>& currentList);
+void deleteshoppinglist(std::map<std::string, ShoppingList>& listsdb, std::string &currentList);
 
-void deleteshoppinglist(std::vector<ShoppingList>& listsdb, std::shared_ptr<ShoppingList> &currentList, std::shared_ptr<ShoppingObject> &currentObject);
-
-void removeobject(const std::shared_ptr<ShoppingList>& currentList, std::shared_ptr<ShoppingObject> &currentObject);
+void removeobject(std::map<std::string, ShoppingList> &listsdb, std::string &currentList, std::istream &input);
 
 void categorylistinit(std::vector<std::string> &categoryDb);
 

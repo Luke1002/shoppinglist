@@ -9,11 +9,10 @@
 
 int main() {
     std::string cmd;
-    std::shared_ptr<ShoppingList> currentShoppingList(nullptr);
-    std::shared_ptr<ShoppingObject> currentShoppingObject(nullptr);
+    std::string currentShoppingList;
     std::vector<std::string> objectCategories;
     categorylistinit(objectCategories);
-    std::vector<ShoppingList> savedlists;
+    std::map<std::string, ShoppingList> savedlists;
     std::cout << "Shopping List Manager" << std::endl
               << "by Luca Lascialfari" << std::endl
               << std::endl
@@ -24,54 +23,36 @@ int main() {
         std::cout << std::endl;
         if (cmd == "help") {
             help();
-        }
-        else if (cmd == "newlist") {
-            newlist(savedlists, currentShoppingList, currentShoppingObject,std::cin);
+        } else if (cmd == "newlist") {
+            newlist(savedlists, currentShoppingList, std::cin);
             std::cout << std::endl;
-        }
-        else if (cmd == "addobject") {
-            addobject(currentShoppingList, currentShoppingObject, objectCategories, std::cin);
+        } else if (cmd == "addobject") {
+            addobject(savedlists, currentShoppingList, objectCategories, std::cin);
             std::cout << std::endl;
-        }
-        else if (cmd == "selectlist") {
-            selectlist(savedlists, currentShoppingList, currentShoppingObject, std::cin);
+        } else if (cmd == "selectlist") {
+            selectlist(savedlists, currentShoppingList, std::cin);
             std::cout << std::endl;
-        }
-        else if (cmd == "selectobject") {
-            selectobject(currentShoppingList, currentShoppingObject, std::cin);
+        } else if (cmd == "printlist") {
+            printshoppinglist(savedlists, currentShoppingList);
+        } else if (cmd == "printobject") {
+            printobject(savedlists, currentShoppingList, std::cin);
             std::cout << std::endl;
-        }
-        else if (cmd == "printlist") {
-            printshoppinglist(currentShoppingList);
-        }
-        else if (cmd == "printobject") {
-            printobject(currentShoppingObject);
+        } else if (cmd == "checkobject") {
+            checkobject(savedlists, currentShoppingList, std::cin);
             std::cout << std::endl;
-        }
-        else if (cmd == "checkobject") {
-            checkobject(currentShoppingObject);
+        } else if (cmd == "uncheckobject") {
+            uncheckobject(savedlists, currentShoppingList, std::cin);
             std::cout << std::endl;
-        }
-        else if (cmd == "uncheckobject") {
-            uncheckobject(currentShoppingObject);
+        } else if (cmd == "shoppingprogress") {
+            shoppingprogress(savedlists, currentShoppingList);
             std::cout << std::endl;
-        }
-        else if (cmd == "shoppingprogress") {
-            shoppingprogress(currentShoppingList);
+        } else if (cmd == "deletelist") {
+            deleteshoppinglist(savedlists, currentShoppingList);
             std::cout << std::endl;
-        }
-        else if(cmd == "deletelist")
-        {
-            deleteshoppinglist(savedlists, currentShoppingList, currentShoppingObject);
+        } else if (cmd == "removeobject") {
+            removeobject(savedlists, currentShoppingList, std::cin);
             std::cout << std::endl;
-        }
-        else if(cmd == "removeobject")
-        {
-            removeobject(currentShoppingList, currentShoppingObject);
-            std::cout << std::endl;
-        }
-        else
-        {
+        } else {
             std::cout << "Command not found. Type \"help\" for a list of possible commands" << std::endl;
         }
     } while (cmd != "exit" || cmd != "Exit");
