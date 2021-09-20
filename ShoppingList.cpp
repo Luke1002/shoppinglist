@@ -24,17 +24,32 @@ void ShoppingList::setListName(std::string name) {
     ShoppingList::listName = name;
 }
 
-void ShoppingList::addObject(ShoppingObject &object) {
-    shoppingList.push_back(object);
+std::map<std::string, ShoppingObject> ShoppingList::getShoppingList() {
+    return shoppingList;
 }
 
-void ShoppingList::printList() {
-    std::cout << listName << std::endl << std::endl;
-    for (auto& element : shoppingList) {
-        element.printObjectInfo();
+void ShoppingList::setShoppingList(const std::map<std::string, ShoppingObject> &shoppingList) {
+    ShoppingList::shoppingList = shoppingList;
+}
+
+void ShoppingList::addObject(std::string objectName, int objectQuantity, std::string objectCategory) {
+    shoppingList.emplace(objectName, ShoppingObject(objectName, objectQuantity, objectCategory));
+}
+
+bool ShoppingList::removeObject(std::string objectName) {
+    if (shoppingList.find(objectName) != shoppingList.end()) {
+        shoppingList.erase(objectName);
+        return true;
+    } else {
+        return false;
     }
 }
 
-std::vector<ShoppingObject> &ShoppingList::getShoppingList() {
-    return shoppingList;
+bool ShoppingList::setBought(std::string objectName, bool inCart) {
+    if (shoppingList.find(objectName) != shoppingList.end()) {
+        shoppingList.find(objectName)->second.setInCart(inCart);
+        return true;
+    } else {
+        return false;
+    }
 }

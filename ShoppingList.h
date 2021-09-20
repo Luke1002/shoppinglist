@@ -8,6 +8,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
 
 #include "ShoppingObject.h"
 
@@ -22,17 +23,19 @@ public:
 
     void setListName(std::string name);
 
-    void addObject(ShoppingObject &object);
+    std::map<std::string, ShoppingObject> getShoppingList();
 
-    void printList();
+    void setShoppingList(const std::map<std::string, ShoppingObject> &shoppingList);
 
-    std::vector<ShoppingObject> &getShoppingList();
+    void addObject(std::string objectName, int objectQuantity, std::string objectCategory);
 
-protected:
+    bool removeObject(std::string objectName);
+
+    bool setBought(std::string objectName, bool inCart);
 
 private:
     std::string listName;
-    std::vector<ShoppingObject> shoppingList;
+    std::map<std::string, ShoppingObject> shoppingList;
 };
 
 

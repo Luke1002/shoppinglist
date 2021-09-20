@@ -6,56 +6,102 @@
 #include "../ShoppingList.h"
 
 
-
-TEST(ShoppingList, GetterSetter)
-{
+TEST(ShoppingList, Getter_Setter) {
+    std::cout << std::endl << std::endl;
+    std::cout << "Testing: ShoppingList" << std::endl << std::endl;
+    std::cout << "----- Starting Test N.1 -----" << std::endl;
+    std::cout << "Test Name: Getter_Setter" << std::endl;
     ShoppingList list("lista");
     EXPECT_EQ(list.getListName(), "lista");
     list.setListName("elenco");
     EXPECT_EQ(list.getListName(), "elenco");
-
+    std::cout << "----- Ending Test N.1 -----" << std::endl << std::endl;
+    std::cout << std::endl << std::endl;
 }
 
-TEST(ShoppingList, Functions)
-{
+TEST(ShoppingList, Managing_Objects) {
+    std::cout << std::endl << std::endl;
+    std::cout << "----- Starting Test N.2 -----" << std::endl;
+    std::cout << "Test Name: Managing_Objects" << std::endl;
     ShoppingList list("lista");
-    list.addObject(*new ShoppingObject("Banana", 7, "Produce"));
-    EXPECT_EQ(list.getShoppingList().back().getObjectName(), "Banana");
-    EXPECT_EQ(list.getShoppingList().back().getObjectQuantity(), 7);
-    EXPECT_EQ(list.getShoppingList().back().getObjectCategory(), "Produce");
-    list.addObject(*new ShoppingObject("Milk", 3, "Dairy products"));
-    EXPECT_EQ(list.getShoppingList().front().getObjectName(), "Banana");
-    EXPECT_EQ(list.getShoppingList().front().getObjectQuantity(), 7);
-    EXPECT_EQ(list.getShoppingList().front().getObjectCategory(), "Produce");
+    list.addObject("Banana", 7, "Produce");
+    EXPECT_EQ(list.getShoppingList().find("Banana")->second.getObjectName(), "Banana");
+    EXPECT_EQ(list.getShoppingList().find("Banana")->second.getObjectQuantity(), 7);
+    EXPECT_EQ(list.getShoppingList().find("Banana")->second.getObjectCategory(), "Produce");
+    list.addObject("Milk", -3, "Dairy products");
+    EXPECT_EQ(list.getShoppingList().find("Banana")->second.getObjectName(), "Banana");
+    EXPECT_EQ(list.getShoppingList().find("Banana")->second.getObjectQuantity(), 7);
+    EXPECT_EQ(list.getShoppingList().find("Banana")->second.getObjectCategory(), "Produce");
 
-    EXPECT_EQ(list.getShoppingList().back().getObjectName(), "Milk");
-    EXPECT_EQ(list.getShoppingList().back().getObjectQuantity(), 3);
-    EXPECT_EQ(list.getShoppingList().back().getObjectCategory(), "Dairy products");
-    list.addObject(*new ShoppingObject("Biscuits", 2, "Snacks"));
+    EXPECT_EQ(list.getShoppingList().find("Milk")->second.getObjectName(), "Milk");
+    EXPECT_EQ(list.getShoppingList().find("Milk")->second.getObjectQuantity(), 3);
+    EXPECT_EQ(list.getShoppingList().find("Milk")->second.getObjectCategory(), "Dairy products");
+    list.addObject("Biscuits", 0, "Snacks");
     int listMember = 0;
-    for(auto itr : list.getShoppingList())
-    {
+    for (auto itr: list.getShoppingList()) {
         listMember++;
-        switch (listMember)
-        {
+        switch (listMember) {
             case 1:
-                EXPECT_EQ(itr.getObjectName(), "Banana");
-                EXPECT_EQ(itr.getObjectQuantity(), 7);
-                EXPECT_EQ(itr.getObjectCategory(), "Produce");
+                EXPECT_EQ(itr.second.getObjectName(), "Banana");
+                EXPECT_EQ(itr.second.getObjectQuantity(), 7);
+                EXPECT_EQ(itr.second.getObjectCategory(), "Produce");
                 break;
 
             case 2:
-                EXPECT_EQ(itr.getObjectName(), "Milk");
-                EXPECT_EQ(itr.getObjectQuantity(), 3);
-                EXPECT_EQ(itr.getObjectCategory(), "Dairy products");
+                EXPECT_EQ(itr.second.getObjectName(), "Biscuits");
+                EXPECT_EQ(itr.second.getObjectQuantity(), 0);
+                EXPECT_EQ(itr.second.getObjectCategory(), "Snacks");
+
                 break;
             case 3:
-                EXPECT_EQ(itr.getObjectName(), "Biscuits");
-                EXPECT_EQ(itr.getObjectQuantity(), 2);
-                EXPECT_EQ(itr.getObjectCategory(), "Snacks");
+                EXPECT_EQ(itr.second.getObjectName(), "Milk");
+                EXPECT_EQ(itr.second.getObjectQuantity(), 3);
+                EXPECT_EQ(itr.second.getObjectCategory(), "Dairy products");
                 break;
             default:
                 break;
         }
     }
+    bool removalSuccess = list.removeObject("Banana");
+    EXPECT_TRUE(removalSuccess);
+    listMember = 0;
+    for (auto itr: list.getShoppingList()) {
+        listMember++;
+        switch (listMember) {
+            case 1:
+                EXPECT_EQ(itr.second.getObjectName(), "Biscuits");
+                EXPECT_EQ(itr.second.getObjectQuantity(), 0);
+                EXPECT_EQ(itr.second.getObjectCategory(), "Snacks");
+
+                break;
+            case 2:
+                EXPECT_EQ(itr.second.getObjectName(), "Milk");
+                EXPECT_EQ(itr.second.getObjectQuantity(), 3);
+                EXPECT_EQ(itr.second.getObjectCategory(), "Dairy products");
+                break;
+            default:
+                break;
+        }
+    }
+    removalSuccess = list.removeObject("NotAnObject");
+    EXPECT_FALSE(removalSuccess);
+    listMember = 0;
+    for (auto itr: list.getShoppingList()) {
+        listMember++;
+
+    }
+    EXPECT_EQ(listMember, 2);
+    list.setBought("Biscuits", true);
+    EXPECT_TRUE(list.getShoppingList().find("Biscuits")->second.isInCart());
+    list.setBought("Milk", false);
+    EXPECT_FALSE(list.getShoppingList().find("Milk")->second.isInCart());
+    list.setBought("NotAnObject", true);
+    EXPECT_TRUE(list.getShoppingList().find("Biscuits")->second.isInCart());
+    EXPECT_FALSE(list.getShoppingList().find("Milk")->second.isInCart());
+    list.setBought("NotAnObject", false);
+    EXPECT_TRUE(list.getShoppingList().find("Biscuits")->second.isInCart());
+    EXPECT_FALSE(list.getShoppingList().find("Milk")->second.isInCart());
+    std::cout << "----- Ending Test N.2 -----" << std::endl << std::endl;
+    std::cout << "Ending testing of: ShoppingList" << std::endl;
+    std::cout << std::endl << std::endl;
 }
