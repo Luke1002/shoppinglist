@@ -15,23 +15,29 @@
 class ShoppingList {
 public:
 
-    explicit ShoppingList(std::string name);
+    explicit ShoppingList(std::string &name);
 
     virtual ~ShoppingList();
 
     std::string getListName() const;
 
-    void setListName(std::string name);
+    void setListName(std::string &name);
 
-    std::map<std::string, ShoppingObject> getShoppingList();
+    std::map<std::string, ShoppingObject> getShoppingList() const;
 
     void setShoppingList(const std::map<std::string, ShoppingObject> &shoppingList);
 
-    void addObject(std::string objectName, int objectQuantity, std::string objectCategory);
+    void addObject(std::string &objectName, int objectQuantity, std::string &objectCategory);
 
-    bool removeObject(std::string objectName);
+    bool removeObject(std::string &objectName);
 
-    bool setBought(std::string objectName, bool inCart);
+    std::map<std::string, ShoppingObject>::iterator findObject(std::string &objectName);
+
+    std::map<std::string, ShoppingObject>::iterator listEnd();
+
+    bool isListEmpty();
+
+    bool setBought(std::string &objectName, bool inCart);
 
 private:
     std::string listName;

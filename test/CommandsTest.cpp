@@ -133,7 +133,7 @@ TEST(Commands, printlist) {
     std::stringstream fakeInput("lista\n");
     newlist(listDatabase, currentList, fakeInput);
     ShoppingList &list = listDatabase.find(currentList)->second;
-    list.addObject("Banana", 7, "Produce");
+    list.addObject((std::string &) "Banana", 7, (std::string &) "Produce");
     std::cout << std::endl << "Expected Result" << std::endl << std::endl
               << "lista" << std::endl << std::endl
               << "Object: Banana" << std::endl
@@ -187,24 +187,24 @@ TEST(Commands, shoppingprogress) {
     std::stringstream fakeInput("lista\n");
     newlist(listDatabase, currentList, fakeInput);
     ShoppingList &list = listDatabase.find(currentList)->second;
-    list.addObject("Banana", 7, "Produce");
-    list.addObject("Milk", 3, "Dairy products");
-    list.addObject("Biscuits", 2, "Snacks");
+    list.addObject((std::string &) "Banana", 7, (std::string &) "Produce");
+    list.addObject((std::string &) "Milk", 3, (std::string &) "Dairy products");
+    list.addObject((std::string &) "Biscuits", 2, (std::string &) "Snacks");
     std::cout << std::endl << "Expected Result" << std::endl
               << "Shopping Progress: 0%" << std::endl << std::endl
               << "Actual Result" << std::endl;
     shoppingprogress(listDatabase, currentList);
-    list.setBought("Milk", true);
+    list.setBought((std::string &) "Milk", true);
     std::cout << std::endl << "Expected Result" << std::endl
               << "Shopping Progress: 33.33%" << std::endl << std::endl
               << "Actual Result" << std::endl;
     shoppingprogress(listDatabase, currentList);
-    list.setBought("Biscuits", true);
+    list.setBought((std::string &) "Biscuits", true);
     std::cout << std::endl << "Expected Result" << std::endl
               << "Shopping Progress: 66.67%" << std::endl << std::endl
               << "Actual Result" << std::endl;
     shoppingprogress(listDatabase, currentList);
-    list.setBought("Milk", false);
+    list.setBought((std::string &) "Milk", false);
     std::cout << std::endl << "Expected Result" << std::endl
               << "Shopping Progress: 33.33%" << std::endl << std::endl
               << "Actual Result" << std::endl;

@@ -11,9 +11,9 @@ TEST(ShoppingList, Getter_Setter) {
     std::cout << "Testing: ShoppingList" << std::endl << std::endl;
     std::cout << "----- Starting Test N.1 -----" << std::endl;
     std::cout << "Test Name: Getter_Setter" << std::endl;
-    ShoppingList list("lista");
+    ShoppingList list((std::string &)"lista");
     EXPECT_EQ(list.getListName(), "lista");
-    list.setListName("elenco");
+    list.setListName((std::string &)"elenco");
     EXPECT_EQ(list.getListName(), "elenco");
     std::cout << "----- Ending Test N.1 -----" << std::endl << std::endl;
     std::cout << std::endl << std::endl;
@@ -23,12 +23,12 @@ TEST(ShoppingList, Managing_Objects) {
     std::cout << std::endl << std::endl;
     std::cout << "----- Starting Test N.2 -----" << std::endl;
     std::cout << "Test Name: Managing_Objects" << std::endl;
-    ShoppingList list("lista");
-    list.addObject("Banana", 7, "Produce");
+    ShoppingList list((std::string &)"lista");
+    list.addObject((std::string &)"Banana", 7, (std::string &)"Produce");
     EXPECT_EQ(list.getShoppingList().find("Banana")->second.getObjectName(), "Banana");
     EXPECT_EQ(list.getShoppingList().find("Banana")->second.getObjectQuantity(), 7);
     EXPECT_EQ(list.getShoppingList().find("Banana")->second.getObjectCategory(), "Produce");
-    list.addObject("Milk", -3, "Dairy products");
+    list.addObject((std::string &)"Milk", -3, (std::string &)"Dairy products");
     EXPECT_EQ(list.getShoppingList().find("Banana")->second.getObjectName(), "Banana");
     EXPECT_EQ(list.getShoppingList().find("Banana")->second.getObjectQuantity(), 7);
     EXPECT_EQ(list.getShoppingList().find("Banana")->second.getObjectCategory(), "Produce");
@@ -36,7 +36,7 @@ TEST(ShoppingList, Managing_Objects) {
     EXPECT_EQ(list.getShoppingList().find("Milk")->second.getObjectName(), "Milk");
     EXPECT_EQ(list.getShoppingList().find("Milk")->second.getObjectQuantity(), 3);
     EXPECT_EQ(list.getShoppingList().find("Milk")->second.getObjectCategory(), "Dairy products");
-    list.addObject("Biscuits", 0, "Snacks");
+    list.addObject((std::string &)"Biscuits", 0, (std::string &)"Snacks");
     int listMember = 0;
     for (auto itr: list.getShoppingList()) {
         listMember++;
@@ -62,7 +62,7 @@ TEST(ShoppingList, Managing_Objects) {
                 break;
         }
     }
-    bool removalSuccess = list.removeObject("Banana");
+    bool removalSuccess = list.removeObject((std::string &)"Banana");
     EXPECT_TRUE(removalSuccess);
     listMember = 0;
     for (auto itr: list.getShoppingList()) {
@@ -83,7 +83,7 @@ TEST(ShoppingList, Managing_Objects) {
                 break;
         }
     }
-    removalSuccess = list.removeObject("NotAnObject");
+    removalSuccess = list.removeObject((std::string &)"NotAnObject");
     EXPECT_FALSE(removalSuccess);
     listMember = 0;
     for (auto itr: list.getShoppingList()) {
@@ -91,14 +91,14 @@ TEST(ShoppingList, Managing_Objects) {
 
     }
     EXPECT_EQ(listMember, 2);
-    list.setBought("Biscuits", true);
+    list.setBought((std::string &)"Biscuits", true);
     EXPECT_TRUE(list.getShoppingList().find("Biscuits")->second.isInCart());
-    list.setBought("Milk", false);
+    list.setBought((std::string &)"Milk", false);
     EXPECT_FALSE(list.getShoppingList().find("Milk")->second.isInCart());
-    list.setBought("NotAnObject", true);
+    list.setBought((std::string &)"NotAnObject", true);
     EXPECT_TRUE(list.getShoppingList().find("Biscuits")->second.isInCart());
     EXPECT_FALSE(list.getShoppingList().find("Milk")->second.isInCart());
-    list.setBought("NotAnObject", false);
+    list.setBought((std::string &)"NotAnObject", false);
     EXPECT_TRUE(list.getShoppingList().find("Biscuits")->second.isInCart());
     EXPECT_FALSE(list.getShoppingList().find("Milk")->second.isInCart());
     std::cout << "----- Ending Test N.2 -----" << std::endl << std::endl;

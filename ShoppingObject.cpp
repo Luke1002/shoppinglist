@@ -2,31 +2,36 @@
 // Created by luke1002 on 5/23/21.
 //
 
-#include <iostream>
 #include <string>
 #include <sstream>
 
 #include "ShoppingObject.h"
 
-ShoppingObject::ShoppingObject(std::string name, int number, std::string category) : objectName(std::move(name)), objectCategory(std::move(category)), inCart(false) {
-    if (number >= 0) {
+ShoppingObject::ShoppingObject(std::string &name, int number, std::string &category) : objectName(std::move(name)), objectCategory(std::move(category)), inCart(false) {
         objectQuantity = abs(number);
-    } else {
-        objectQuantity = abs(number);
-    }
 }
 
 ShoppingObject::~ShoppingObject() = default;
 
-std::string ShoppingObject::getObjectName() {
+
+const std::string &ShoppingObject::getObjectName() const {
     return objectName;
 }
 
-void ShoppingObject::setObjectName(std::string name) {
+void ShoppingObject::setObjectName(const std::string &name) {
     ShoppingObject::objectName = name;
 }
 
-int ShoppingObject::getObjectQuantity() {
+const std::string &ShoppingObject::getObjectCategory() const {
+    return objectCategory;
+}
+
+void ShoppingObject::setObjectCategory(const std::string &categoryName) {
+    ShoppingObject::objectCategory = categoryName;
+}
+
+
+int ShoppingObject::getObjectQuantity() const{
     return objectQuantity;
 }
 
@@ -41,14 +46,6 @@ void ShoppingObject::setObjectQuantity(int number) {
 std::stringstream ShoppingObject::toString() {
     return std::stringstream(
             objectName + "\n" + std::to_string(objectQuantity) + "\n" + objectCategory + "\n");
-}
-
-std::string &ShoppingObject::getObjectCategory() {
-    return objectCategory;
-}
-
-void ShoppingObject::setObjectCategory(std::string objectTag) {
-    ShoppingObject::objectCategory = objectTag;
 }
 
 bool ShoppingObject::isInCart() const {

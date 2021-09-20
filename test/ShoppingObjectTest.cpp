@@ -11,7 +11,7 @@ TEST(ShoppingObject, Getter_Setter) {
     std::cout << "Testing: ShoppingObject" << std::endl << std::endl;
     std::cout << "----- Starting Test N.1 -----" << std::endl;
     std::cout << "Test Name: Getter_Setter" << std::endl;
-    ShoppingObject object("Banana", 7, "Produce");
+    ShoppingObject object((std::string &)"Banana",7,(std::string &)"Produce");
     EXPECT_EQ(object.getObjectName(), "Banana");
     EXPECT_EQ(object.getObjectQuantity(), 7);
     EXPECT_EQ(object.getObjectCategory(), "Produce");
@@ -41,7 +41,7 @@ TEST(ShoppingObject, Functions) {
     std::cout << "----- Starting Test N.2 -----" << std::endl;
     std::cout << "Testing: ShoppingObject" << std::endl;
     std::cout << "Test Name: Functions" << std::endl;
-    ShoppingObject object("Banana", 7, "Produce");
+    ShoppingObject object((std::string &)"Banana", 7, (std::string &)"Produce");
     EXPECT_EQ(object.toString().str(), "Banana\n7\nProduce\n");
     object.setObjectName("Roast Beef");
     EXPECT_EQ(object.toString().str(), "Roast Beef\n7\nProduce\n");

@@ -53,10 +53,8 @@ addobject(std::map<std::string, ShoppingList> &listsdb, std::string &currentList
             nameFound = false;
             std::cout << "Name: ";
             std::getline(input, name);
-            std::unique_ptr<std::map<std::string, ShoppingObject>> list = std::make_unique<std::map<std::string, ShoppingObject>>(
-                    listPtr.getShoppingList());
-            auto itr = list->find(name);
-            if (itr != list->end()) {
+            auto itr = listPtr.findObject(name);
+            if (itr != listPtr.listEnd()) {
                 nameFound = true;
                 std::cout << "Name already used for another object in the same list." << std::endl
                           << "Please choose itr different name" << std::endl;
@@ -145,7 +143,7 @@ void selectlist(std::map<std::string, ShoppingList> &listsdb, std::string &curre
 void checkobject(std::map<std::string, ShoppingList> &listsdb, std::string &currentList, std::istream &input) {
     ShoppingList &listPtr = listsdb.find(currentList)->second;
     if (!currentList.empty()) {
-        if (!(listPtr.getShoppingList().empty())) {
+        if (!(listPtr.isListEmpty())) {
             std::string name;
             std::cout << "insert name of object to check" << std::endl;
             std::getline(input, name);
@@ -167,7 +165,7 @@ void checkobject(std::map<std::string, ShoppingList> &listsdb, std::string &curr
 void uncheckobject(std::map<std::string, ShoppingList> &listsdb, std::string &currentList, std::istream &input) {
     ShoppingList &listPtr = listsdb.find(currentList)->second;
     if (!currentList.empty()) {
-        if (!(listPtr.getShoppingList().empty())) {
+        if (!(listPtr.isListEmpty())) {
             std::string name;
             std::cout << "insert name of object to uncheck" << std::endl;
             std::getline(input, name);
@@ -219,15 +217,13 @@ void printshoppinglist(std::map<std::string, ShoppingList> &listsdb, std::string
 void printobject(std::map<std::string, ShoppingList> &listsdb, std::string &currentList, std::istream &input) {
     ShoppingList &listPtr = listsdb.find(currentList)->second;
     if (!currentList.empty()) {
-        if (!(listPtr.getShoppingList().empty())) {
+        if (!(listPtr.isListEmpty())) {
             std::string name;
             std::cout << "insert name of object to print" << std::endl;
             std::getline(input, name);
-            std::unique_ptr<std::map<std::string, ShoppingObject>> list = std::make_unique<std::map<std::string, ShoppingObject>>(
-                    listPtr.getShoppingList());
-            auto itr = list->find(name);
-            if (itr != list->end()) {
-                std::stringstream objectOutput = listPtr.getShoppingList().find(name)->second.toString();
+            auto itr = listPtr.findObject(name);
+            if (itr != listPtr.listEnd()) {
+                std::stringstream objectOutput = listPtr.findObject(name)->second.toString();
                 std::string tmp;
                 std::getline(objectOutput, tmp);
                 std::cout << std::endl << "Object: " << tmp << std::endl;
@@ -239,7 +235,7 @@ void printobject(std::map<std::string, ShoppingList> &listsdb, std::string &curr
                 std::cout << "Category: " << tmp << std::endl;
                 std::getline(objectOutput, tmp);
                 std::cout << "Bought: ";
-                if (listPtr.getShoppingList().find(name)->second.isInCart()) {
+                if (listPtr.findObject(name)->second.isInCart()) {
                     std::cout << "Yes";
                 } else {
                     std::cout << "No";
@@ -260,7 +256,7 @@ void printobject(std::map<std::string, ShoppingList> &listsdb, std::string &curr
 void shoppingprogress(std::map<std::string, ShoppingList> &listsdb, std::string &currentList) {
     ShoppingList &listPtr = listsdb.find(currentList)->second;
     if (!currentList.empty()) {
-        if (!(listPtr.getShoppingList().empty())) {
+        if (!(listPtr.isListEmpty())) {
             int totalElements = 0;
             int boughtElements = 0;
             for (auto &element: listPtr.getShoppingList()) {
@@ -296,7 +292,7 @@ void deleteshoppinglist(std::map<std::string, ShoppingList> &listsdb, std::strin
 void removeobject(std::map<std::string, ShoppingList> &listsdb, std::string &currentList, std::istream &input) {
     ShoppingList &listPtr = listsdb.find(currentList)->second;
     if (!currentList.empty()) {
-        if (listPtr.getShoppingList().empty()) {
+        if (listPtr.isListEmpty()) {
             std::cout << "Selected list is empty" << std::endl;
         } else {
             std::string name;
