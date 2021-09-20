@@ -10,37 +10,33 @@
 
 class ShoppingObject {
 public:
-    ShoppingObject(std::string  name, int number, std::string category);
+    ShoppingObject(std::string name, int number, std::string category);
 
     virtual ~ShoppingObject();
 
-    std::basic_string<char> getObjectName() const;
+    std::string getObjectName();
 
     void setObjectName(std::string name);
 
-    unsigned int getObjectQuantity();
+    int getObjectQuantity();
 
     void setObjectQuantity(int number);
 
-    void printObjectInfo();
+    bool isInCart() const;
 
-    void checkTrue();
+    void setInCart(bool inCart);
 
-    void checkFalse();
+    std::string &getObjectCategory();
 
-    bool isBought();
+    void setObjectCategory(std::string objectTag);
 
-protected:
+    std::stringstream toString();
 
 private:
     std::string objectName;
-    unsigned int objectQuantity;
+    int objectQuantity;
     bool inCart;
     std::string objectCategory;
-public:
-    const std::string &getObjectCategory() const;
-
-    void setObjectCategory(const std::string &objectTag);
 };
 
 

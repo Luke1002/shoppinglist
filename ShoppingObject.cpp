@@ -4,71 +4,57 @@
 
 #include <iostream>
 #include <string>
+#include <sstream>
 
 #include "ShoppingObject.h"
 
-ShoppingObject::ShoppingObject(std::string  name, int number, std::string category) : objectName(std::move(name)), objectQuantity(number), objectCategory(std::move(category)), inCart(false) {
-
+ShoppingObject::ShoppingObject(std::string name, int number, std::string category) : objectName(std::move(name)), objectCategory(std::move(category)), inCart(false) {
+    if (number >= 0) {
+        objectQuantity = abs(number);
+    } else {
+        objectQuantity = abs(number);
+    }
 }
 
 ShoppingObject::~ShoppingObject() = default;
 
-std::string ShoppingObject::getObjectName() const {
+std::string ShoppingObject::getObjectName() {
     return objectName;
 }
 
-void ShoppingObject::setObjectName( std::string name) {
+void ShoppingObject::setObjectName(std::string name) {
     ShoppingObject::objectName = name;
 }
 
-unsigned int ShoppingObject::getObjectQuantity()  {
+int ShoppingObject::getObjectQuantity() {
     return objectQuantity;
 }
 
 void ShoppingObject::setObjectQuantity(int number) {
-    if(number>0)
-    {
+    if (number >= 0) {
         objectQuantity = number;
-    }
-    else if(number == 0)
-    {
-        objectQuantity = 1;
-    }
-    else
-    {
+    } else {
         objectQuantity = -(number);
     }
 }
 
-void ShoppingObject::printObjectInfo() {
-    std::cout << "Object: " << getObjectName() << std::endl
-              << "Quantity: " << getObjectQuantity() << std::endl
-              << "Category: " << getObjectCategory() << std::endl
-              << "Bought: ";
-    if (inCart) {
-        std::cout << "Yes" << std::endl;
-    } else {
-        std::cout << "No" << std::endl;
-    }
-    std::cout << std::endl;
+std::stringstream ShoppingObject::toString() {
+    return std::stringstream(
+            objectName + "\n" + std::to_string(objectQuantity) + "\n" + objectCategory + "\n");
 }
 
-void ShoppingObject::checkTrue() {
-    inCart = true;
-}
-
-void ShoppingObject::checkFalse() {
-    inCart = false;
-}
-
-bool ShoppingObject::isBought()  {
-    return inCart;
-}
-
-const std::string &ShoppingObject::getObjectCategory() const {
+std::string &ShoppingObject::getObjectCategory() {
     return objectCategory;
 }
 
-void ShoppingObject::setObjectCategory(const std::string &objectTag) {
+void ShoppingObject::setObjectCategory(std::string objectTag) {
     ShoppingObject::objectCategory = objectTag;
+}
+
+bool ShoppingObject::isInCart() const {
+    return inCart;
+}
+
+void ShoppingObject::setInCart(bool inCart) {
+    ShoppingObject::inCart = inCart;
 }
